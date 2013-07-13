@@ -1,0 +1,114 @@
+
+
+
+/* ==========================================================================
+Author's custom styles
+========================================================================== */
+.msg-income {
+border: 1px solid #DDD;
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+border-radius: 6px;
+-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .075);
+-moz-box-shadow: 0 1px 2px rgba(0,0,0,.075);
+box-shadow: 0 1px 2px rgba(0, 0, 0, .075);
+
+}
+
+.msg-income ul {
+margin-left:5px;
+}
+.msg-income .name {
+  font-weight:bold;
+
+}
+
+textarea.msg-outgo {
+
+
+}
+.container {
+  /*height:100%;
+  background-color:#EEEEFF;
+*/
+  margin-top:20px;
+}
+
+adiv {
+  background-color:#CFC;
+ border: 1px solid grey; 
+}
+html {
+  height:100%;
+}
+body {
+  height:100%;
+}
+
+h1 {
+color:black;
+}
+
+
+
+
+.msg-income {
+height:217px;
+}
+
+
+
+.chatbox.withinfo {
+  height:190px;
+}
+.chatbox {
+  height:218px;
+  overflow:auto;
+
+/*
+  -webkit-transition: width 2s ease, height 2s ease;  
+    -moz-transition: width 2s ease, height 2s ease;  
+    -o-transition: width 2s ease, height 2s ease;  
+    -ms-transition: width 2s ease, height 2s ease;  
+    transition: width 2s ease, height 2s ease;  
+*/
+}
+
+.infobox.show { 
+height:28px;
+
+}
+.infobox {
+/*
+  -webkit-transition: width 2s ease, height 2s ease;  
+    -moz-transition: width 2s ease, height 2s ease;  
+    -o-transition: width 2s ease, height 2s ease;  
+    -ms-transition: width 2s ease, height 2s ease;  
+    transition: width 2s ease, height 2s ease;  
+*/
+
+height:0px;
+margin-top:-28px;
+line-height:28px;
+font-size:14px;
+overflow:hidden;
+}
+
+.info {
+color:#CCC;
+padding-left:14px;
+font-weight:bold;
+}
+
+
+
+
+            body {
+            /*  padding-top: 60px; */
+              padding-bottom: 40px;
+            }
+            .help-block { opacity: 0.75 }
+
+
+
+
