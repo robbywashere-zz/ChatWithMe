@@ -14,7 +14,7 @@ http://prosody.im/doc/install
 Modify Configuration:
 ------------------------
 
-In prosody.cfg.lua set `http_path` to the ../www folder location of this project - $> cd www; pwd
+In prosody.cfg.lua set http\_path to the ../www folder location of this project - $> cd www; pwd
 
 Set support\_contact to the JID of the account which the users will be communicating with
 
