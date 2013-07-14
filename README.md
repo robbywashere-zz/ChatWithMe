@@ -16,9 +16,9 @@ Modify Configuration:
 
 In prosody.cfg.lua set `http_path` to the ../www folder location of this project - $> cd www; pwd
 
-Set support_contact to the JID of the account which the users will be communicating with
+Set support\_contact to the JID of the account which the users will be communicating with
 
-Set support_nick to the name which will be displayed for the user or the nickname of the support account
+Set support\_nick to the name which will be displayed for the user or the nickname of the support account
 
 
 Replace existing modules and configuration:
@@ -27,7 +27,7 @@ Replace existing module files with the new modules located in the system directo
 
 Backup, version control, or rename the existing ones.
 
-The names of the files are: mod\_web\_presence.lua, mod\_carbons.lua, mod\_bosh.lua, mod\_carbons.lua, prosody.cfg.lua
+The names of the files are: mod\_web\_presence.lua, mod\_register\_json.lua, mod\_bosh.lua, mod\_carbons.lua, prosody.cfg.lua
 
 To find the location of your current prosody modules and config file try:
 
