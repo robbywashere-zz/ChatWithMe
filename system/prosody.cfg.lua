@@ -66,25 +66,18 @@ reg_servlet_ports = {
 
 
 modules_enabled = {
+
   "web_presence";
-  --"smacks";
-
-  --"bosh_cookie";
    "bosh";
-
-  
-
   "support_contact";
   "register_json";
-
   "carbons";
 
 
+
+
   "offline"; -- Store offline messages
-
   "message"; -- Route messages
-
-
   -- Generally required
   "roster"; -- Allow users to have a roster. Recommended ;)
   "saslauth"; -- Authentication for clients and servers. Recommended if you want to log in.
