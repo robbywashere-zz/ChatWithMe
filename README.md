@@ -19,7 +19,7 @@ The names of the files are: mod_web_presence.lua, mod_bosh.lua, mod_carbons.lua,
 
 To find the location of your current prosody modules and config file try:
 
-head -n20 `which prosodyctl`
+head -n20 \`which prosodyctl\`
 
 Look for value of CFG_DATADIR for the config file, CFG_PLUGINDIR will be the module location
 
