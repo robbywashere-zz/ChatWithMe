@@ -27,10 +27,10 @@ CFG_DATADIR='/opt/local/var/lib/prosody';
 
 
 
-support_contact = { 'admin@localhost' };
-support_contact_nick = { 'Robby' };
+support_contact = { 'support@localhost' };
+support_contact_nick = { 'support' };
 
-admins = { 'admin@localhost' };
+admins = {  };
 
 -- Enable use of libevent for better performance under high load
 -- For more information see: http://prosody.im/doc/libevent
@@ -44,7 +44,8 @@ pidfile = "/var/run/prosody.pid" -- this is the default on Debian
 run_as_root = true -- I am insane!
 disallow_s2s = true
 
-http_path = "/Users/robby/Projects/chatwithrobby/www"
+http_path = "/Users/robby/Projects/chatwithme/www"
+
 http_ports = { 8080 }
 
 bosh_ports = {
