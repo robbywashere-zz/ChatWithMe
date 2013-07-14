@@ -15,7 +15,7 @@ Replace existing module files with the new modules located in the system directo
 
 Backup, version control, or rename the existing ones.
 
-The names of the files are: mod_web_presence.lua, mod_bosh.lua, mod_carbons.lua, prosody.cfg.lua
+The names of the files are: mod_web_presence.lua, mod_carbons.lua, mod_bosh.lua, mod_carbons.lua, prosody.cfg.lua
 
 To find the location of your current prosody modules and config file try:
 
