@@ -28,7 +28,7 @@ CFG_DATADIR='/opt/local/var/lib/prosody';
 
 
 support_contact = { 'support@localhost' };
-support_contact_nick = { 'Robby' };
+support_contact_nick = { 'support' };
 
 admins = {  };
 
