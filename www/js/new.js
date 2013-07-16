@@ -9,9 +9,9 @@
 //TODO: come up with better nickname support for both Support and User
 
 
-var DEBUG = true;
+var DEBUG = false;
 var RAW = false;
-var LOG = true;
+var LOG = false;
 
 
 
@@ -117,7 +117,7 @@ var control = {
   },
 
   register: function(profile) {
-    var req_obj = $.post('/register_account',JSON.stringify({'username':profile['username'],'password':profile['password'],'host':profile['host']}))
+    var req_obj = $.post('/register',JSON.stringify({'username':profile['username'],'password':profile['password'],'host':profile['host']}))
       return req_obj;
   },
 

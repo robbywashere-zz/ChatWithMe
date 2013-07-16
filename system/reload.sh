@@ -7,6 +7,7 @@ cp mod_web_presence.lua $MODULE_DIR
 cp mod_bosh.lua  $MODULE_DIR
 cp mod_carbons.lua  $MODULE_DIR
 cp mod_register_json.lua $MODULE_DIR
-
 cp prosody.cfg.lua $CFG_DIR 
+
+prosodyctl restart > /dev/null &
 

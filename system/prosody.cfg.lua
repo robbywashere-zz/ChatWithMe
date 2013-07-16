@@ -28,7 +28,7 @@ CFG_DATADIR='/opt/local/var/lib/prosody';
 
 
 support_contact = { 'support@localhost' };
-support_contact_nick = { 'support' };
+support_contact_nick = { 'Robby' };
 
 admins = {  };
 
@@ -44,22 +44,29 @@ pidfile = "/var/run/prosody.pid" -- this is the default on Debian
 run_as_root = true -- I am insane!
 disallow_s2s = true
 
-http_path = "/Users/robby/Projects/chatwithme/www"
+--HTTP SERVER
+--http_path = "/Users/robby/Projects/chatwithme/www"
+--http_ports = { 8080 }
 
-http_ports = { 8080 }
 
+
+
+--mod_bosh and mod_register_json config
 bosh_ports = {
   {
     port = 8080;
     path = "xmpp-httpbind";
-    interface = "127.0.0.1";
+    --interface = "127.0.0.1";
     --xmpp-httpbind
   }
 }
 
-reg_servlet_ports = { 
+register_json_ports = { 
   { 
-    port = 8080 
+    --port = 8889;
+    port = 8080;
+    path = "register";
+    --interface = "127.0.0.1";
   }
 }
 
@@ -68,7 +75,8 @@ reg_servlet_ports = {
 
 modules_enabled = {
 
-  "web_presence";
+  --"web_presence";
+
    "bosh";
   "support_contact";
   "register_json";
@@ -109,7 +117,7 @@ modules_enabled = {
   -- Other specific functionality
   "posix"; -- POSIX functionality, sends server to background, enables syslog, etc.
   --"bosh"; -- Enable BOSH clients, aka "Jabber over HTTP"
-  "httpserver"; -- Serve static files from a directory over HTTP
+ --"httpserver"; -- Serve static files from a directory over HTTP
   --"groups"; -- Shared roster support
   --"announce"; -- Send announcement to all online users
   --"welcome"; -- Welcome users who register accounts
@@ -176,12 +184,11 @@ authentication = "internal_plain"
 daemonize=false
 
 log = {
-  info = "prosody.log"; -- Change 'info' to 'debug' for verbose logging
-  ----------
-  error = "prosody.err";
-  debug = "prosody.debug";
-  --	-- "*syslog"; -- Uncomment this for logging to syslog
-  --	error = "*console"; -- Log to the console, useful for debugging with daemonize=false
+--  info = "prosody.log"; -- Change 'info' to 'debug' for verbose logging
+--  error = "prosody.err";
+--  debug = "prosody.debug";
+--  - "*syslog"; -- Uncomment this for logging to syslog
+--  --	error = "*console"; -- Log to the console, useful for debugging with daemonize=false
 
 }
 
