@@ -52,16 +52,10 @@ var misc = {
 
     store: {
 
-      set: function(name,data){
-        UTIL.Jar.set(name,data);
+      set: store.set,
+      get: store.get
 
-      },
-      get: function(name){
-        return UTIL.Jar.get(name);
-
-      },
-
-    },
+    }
 
 
 }
