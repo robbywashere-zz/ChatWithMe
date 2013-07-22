@@ -10,5 +10,4 @@ cp mod_support_contact.lua  $MODULE_DIR
 cp mod_register_json.lua $MODULE_DIR
 cp prosody.cfg.lua $CFG_DIR 
 
-prosodyctl restart > /dev/null &
-
+prosodyctl restart 
