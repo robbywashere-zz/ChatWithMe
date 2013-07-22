@@ -90,8 +90,8 @@ var cBox = (function(){
    offLogSet: function(sender,text) {
       var limit = 25;
       var offline = misc.store.get('offlineLog') || [];
-      offline = offline.unshift([sender,text]);
-      offline = offline.slice(0,limit);
+      offline.unshift([sender,text]);
+      if (offline.length>0) offline = offline.slice(0,limit);
       misc.store.set('offlineLog',offline);
     },
    offLogRestore: function() {

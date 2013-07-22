@@ -103,7 +103,8 @@ var control = {
     var profile = {
       'username': misc.random(),
       'password': misc.random(),
-      'host': 'localhost',
+      'host': document.location.host,
+
     };
     profile['jid'] = profile['username'] + '@' + profile['host'];
     misc.log('DEBUG','Created profile: ' + JSON.stringify(profile));
