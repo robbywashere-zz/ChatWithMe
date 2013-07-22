@@ -1,14 +1,8 @@
 var cBox = (function(){
-
-
-
-
   var Self = {
 
     init: function() {
       this.sT_html = $('[data-attr="sentence"]');
-
-     
       this.DOM['info'] = $('[data-attr="info"]');
       this.DOM['log'] = $('[data-attr="log"]');
       this.DOM['titlebar'] = $('[data-attr="titlebar"]');
@@ -17,9 +11,6 @@ var cBox = (function(){
       this.DOM['nickname-box']= $('[data-attr="nickname-box"]');
       this.DOM['nickname'] = $('[data-attr="nickname"]');
       this.DOM['chatbox'] = $('[data-container="chatbox"]');
-
-      
-
       this.DOM['chatbox'].click(function(){
           $('input[type="text"]:visible, textarea:visible').first().focus();
       })
@@ -99,8 +90,8 @@ var cBox = (function(){
    offLogSet: function(sender,text) {
       var limit = 25;
       var offline = misc.store.get('offlineLog') || [];
-      offline.unshift([sender,text]);
-      offline.slice(0,limit);
+      offline = offline.unshift([sender,text]);
+      offline = offline.slice(0,limit);
       misc.store.set('offlineLog',offline);
     },
    offLogRestore: function() {
