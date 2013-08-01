@@ -3,6 +3,7 @@ INSTALL
 
 First Install prosody:
 ---------------------
+
 This project was built to work with 0.8, it should be forward compatible
 For information on installing prosody for your OS go here:
 
