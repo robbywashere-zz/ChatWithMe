@@ -30,7 +30,7 @@ Does it work?:
 --------------
 Awesome! Now run:
 
-install.lua
+$> sudo install.lua
 
 
 
