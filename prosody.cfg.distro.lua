@@ -20,12 +20,7 @@
 -- for the server. Note that you must create the accounts separately
 -- (see http://prosody.im/doc/creating_accounts for info)
 -- Example: admins = { "user1@example.com", "user2@example.net" }
-
-
-
 admins = { }
-
-
 
 -- Enable use of libevent for better performance under high load
 -- For more information see: http://prosody.im/doc/libevent
@@ -91,8 +86,8 @@ allow_registration = false;
 -- These are the SSL/TLS-related settings. If you don't want
 -- to use SSL/TLS, you may comment or remove this
 ssl = {
-	key = "/usr/local/Cellar/prosody/0.8.2/etc/prosody/certs/localhost.key";
-	certificate = "/usr/local/Cellar/prosody/0.8.2/etc/prosody/certs/localhost.cert";
+	key = "/opt/local/etc/prosody/certs/localhost.key";
+	certificate = "/opt/local/etc/prosody/certs/localhost.cert";
 }
 
 -- Only allow encrypted streams? Encryption is already used when
@@ -148,8 +143,8 @@ VirtualHost "example.com"
 	-- Note that old-style SSL on port 5223 only supports one certificate, and will always
 	-- use the global one.
 	ssl = {
-		key = "/usr/local/Cellar/prosody/0.8.2/etc/prosody/certs/example.com.key";
-		certificate = "/usr/local/Cellar/prosody/0.8.2/etc/prosody/certs/example.com.crt";
+		key = "/opt/local/etc/prosody/certs/example.com.key";
+		certificate = "/opt/local/etc/prosody/certs/example.com.crt";
 	}
 
 ------ Components ------

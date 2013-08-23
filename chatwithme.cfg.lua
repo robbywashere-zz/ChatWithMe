@@ -2,10 +2,12 @@
 
 --<ChatWithMe.cfg> -- Do not remove this line
 
-pidfile = "/var/run/prosody.pid" -- this is the default on Debian
+---------- Inband Registration ------------
+allow_registration = true
+
 
 ---------- Support contact --------
-support_contact_nick = { 'support' }; -- support@<hostname>
+support_contact_nick = { 'support' }; 
 
 
 ------------ BOSH Servlet ----------
@@ -26,6 +28,5 @@ register_json_ports = {
 
 ------------ HTTP Servlet ----------
 http_ports = { 8080 }
-http_path = "/Users/robby/Projects/chatwithme/system/www"
 
-
+http_path = "/Users/robby/Projects/chatwithme/www"

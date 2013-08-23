@@ -182,10 +182,11 @@ function modify_config(target_file)
     return
   end
 
-  log("Appending chatWithMe configuration to Prosody configuration:")
+  log("Preppending chatWithMe configuration to Prosody configuration:")
   log(target_file)
 
-  append_to(target_file,cwm_cfg)
+  overwrite(target_file,cwm_cfg)
+  append_to(target_file,prosody_cfg)
 
 
   local for_pattern = '--ChatWithMe Modules'
@@ -206,7 +207,10 @@ function add_modules_enabled(config_file)
 
     --ChatWithMe Modules
 
+    "register";
+    "httpserver";
     "posix";
+    "bosh";
     "cwm_carbons";
     "cwm_register_json";
     "cwm_support_contact";
@@ -245,7 +249,13 @@ function add_modules_enabled(config_file)
 
   log('Installation complete.')
 
-  log('On the command prompt type $> prosodyctl start')
+  log('Add support user with:')
+
+  log('$> prosodyctl adduser support@<HOST-NAME>')
+
+  log('Start your server with:')
+
+  log('$> prosodyctl start')
 
   log('then visit http://localhost:8080')
 

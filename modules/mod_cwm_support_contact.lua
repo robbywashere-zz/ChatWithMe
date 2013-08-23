@@ -7,7 +7,7 @@
 
 local host = module:get_host();
 
-local support_contact = module:get_option_string("support_contact", "admin@"..host);
+local support_contact = module:get_option_string("support_contact", "support@"..host);
 local support_contact_nick = module:get_option_string("support_contact_nick", "Support");
 local support_contact_group = module:get_option_string("support_contact_group", "Users");
 

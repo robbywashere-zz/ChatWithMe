@@ -103,7 +103,8 @@ var control = {
     var profile = {
       'username': misc.random(),
       'password': misc.random(),
-      'host': document.location.host,
+      //'host': document.location.host,
+      'host': document.location.host.split(':')[0]
 
     };
     profile['jid'] = profile['username'] + '@' + profile['host'];
