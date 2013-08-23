@@ -2,6 +2,10 @@
 
 --<ChatWithMe.cfg> -- Do not remove this line
 
+
+pidfile = "prosody.pid"
+run_as_root = true -- I am insane!
+
 ---------- Inband Registration ------------
 allow_registration = true
 
@@ -28,5 +32,3 @@ register_json_ports = {
 
 ------------ HTTP Servlet ----------
 http_ports = { 8080 }
-
-http_path = "/Users/robby/Projects/chatwithme/www"

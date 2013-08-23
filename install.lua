@@ -253,6 +253,8 @@ function add_modules_enabled(config_file)
 
   log('$> prosodyctl adduser support@<HOST-NAME>')
 
+  log('OR for local testing try something like: $> prosodyctl adduser support@localhost')
+
   log('Start your server with:')
 
   log('$> prosodyctl start')
