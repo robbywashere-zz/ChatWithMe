@@ -2,7 +2,7 @@ var cBox = (function(){
   var Self = {
 
     init: function() {
-      this.sT_html = $('[data-attr="sentence"]');
+      this.DOM['sentence_template'] = $('[data-attr="sentence"]');
       this.DOM['info'] = $('[data-attr="info"]');
       this.DOM['log'] = $('[data-attr="log"]');
       this.DOM['titlebar'] = $('[data-attr="titlebar"]');
@@ -11,9 +11,46 @@ var cBox = (function(){
       this.DOM['nickname-box']= $('[data-attr="nickname-box"]');
       this.DOM['nickname'] = $('[data-attr="nickname"]');
       this.DOM['chatbox'] = $('[data-container="chatbox"]');
+      this.DOM['chatbox-title'] = $('[data-attr="chatbox-title"]');
+      this.DOM['title'] = $('title');
+      
+
+        ////////////// Chatbox minimize maximize logic
+
+      //Retain minimized state of chatbox after window close
+      var chatboxstate = (misc.store.get('chatbox-state')) ? true : false;
+
+      //initialize page with stored state
+      if (chatboxstate) Self.DOM['chatbox'].removeClass('minimize');
+
+
+      this.DOM['chatbox-title'].click(function(){ 
+        //change and store state 
+        chatboxstate = !chatboxstate;
+        misc.store.set('chatbox-state',chatboxstate);
+
+        if (chatboxstate) {
+          Self.DOM['chatbox'].removeClass('minimize');
+        }
+        else {
+          Self.DOM['chatbox'].addClass('minimize');
+          Self.DOM['textarea'].blur();
+        }
+
+      });
+          ///////////// end
+
+
+      //make textarea always focus when you click on the chat 'window'
       this.DOM['chatbox'].click(function(){
-          $('input[type="text"]:visible, textarea:visible').first().focus();
+        $('textarea:visible').first().focus();
       })
+
+
+      this.DOM['textarea'].focus(function(){
+        Self.notify(false);
+      });
+
 
       $('[data-attr="sentence"]').remove();
       if (misc.store.get('nickname') == null) { 
@@ -27,12 +64,12 @@ var cBox = (function(){
             $(this).unbind('keydown');
             return false;
           }
-      });
-      cBox.DOM['nickname-box'].show();
+        });
+        cBox.DOM['nickname-box'].show();
       }
       else {
-      cBox.DOM['nickname-box'].hide();
-      this.DOM['chatbox'].children('input[type="checkbox"]').click();
+        cBox.DOM['nickname-box'].hide();
+        //Open chatbox automatically this.DOM['chatbox'].children('input[type="checkbox"]').click();
 
       }
       $('[data-attr="textarea"]').keydown(function(e){
@@ -47,11 +84,14 @@ var cBox = (function(){
 
 
       hooks["message"] = function(name,msg) { 
+        //accounting for carbons - or new tabs
         if (name == Strophe.getBareJidFromJid(control.socket.jid)) {
           name = "Me";
           cBox.logMsg(name,msg,false);
         }
         else {
+          //Message is from someone else, trigger notify
+          cBox.notify(true);
           cBox.logMsg(name,msg);
         }
       }
@@ -72,29 +112,80 @@ var cBox = (function(){
           cBox.DOM['info'].show().text(name + ' is offline');
         } 
         else {
-
           if (misc.store.get('nickname') != null) { 
-
-          control.nickname(misc.store.get('nickname'));
-
+            control.nickname(misc.store.get('nickname'));
           }
-
           cBox.DOM['info'].hide().text('');
         }
         cBox.userStatus(codes[type]); 
       }
     },
 
+    //true or false - is - on or off
+    notify: function(state) {
+      //notify on
+      if ((state) && (!this.DOM['textarea'].is(':focus'))) {
+        this.DOM['chatbox-title'].addClass('notify');
+        cBox.titleAlert('New Message');
+        
+      }
+      //notify off
+      else {
+        cBox.titleAlert(false);
+        this.DOM['chatbox-title'].removeClass('notify');
+      }
+    },
+
+
+    //returns start() and .stop() chainable functions
+    alternate: function(fn1,fn2) {
+
+      var _alt = {};
+      var _timer; 
+        _alt.fn1 = fn1;
+        _alt.fn2 = fn2;
+        var arr = [fn1,fn2];
+        var i = 0; 
+
+        this.start = function() {
+          _timer = setInterval(function() { i++ ; i = i % 2; arr[i]() ; },1000);
+          return this;
+        };
+        this.stop = function() {
+          clearInterval(_timer);
+          if (typeof _alt['fn1'] === "function") { 
+            _alt['fn1']();    
+          } 
+          return this;
+        };
+      },
+
+
+    titleAlert: (function() {
+        var _alternator = {};
+        _alternator.stop =  function() {};
+      return function(msg) {
+        
+        _alternator.stop();
+        if (!msg) { return; }
+        var oldTitle = this.DOM['title'].text();
+        var newTitle = msg;
+        var _that = this;
+        _alternator = new this.alternate(function(){ _that.DOM['title'].text(oldTitle) },  function() { _that.DOM['title'].text(newTitle)  } ).start();
+      }
+
+    })(),
+
     DOM: {},
 
-   offLogSet: function(sender,text) {
+    offLogSet: function(sender,text) {
       var limit = 25;
       var offline = misc.store.get('offlineLog') || [];
       offline.unshift([sender,text]);
       if (offline.length>0) offline = offline.slice(0,limit);
       misc.store.set('offlineLog',offline);
     },
-   offLogRestore: function() {
+    offLogRestore: function() {
       var offline = misc.store.get('offlineLog');
       offline.reverse();
       for (var i in offline) {
@@ -105,8 +196,8 @@ var cBox = (function(){
       }
     },
 
-    _newSt: function() {
-      return this.sT_html.clone();
+    _newSentence: function() {
+      return this.DOM['sentence_template'].clone();
     }, 
     userStatus: function(type) {
       this.DOM['status-icon'].attr('class','icon ' + type);
@@ -121,19 +212,17 @@ var cBox = (function(){
       }
       return str;
     },
-    offline: function(){
-
-    },
+    offline: function(){ return true; },
     logMsg: function(sender,text,store) {
       if (typeof store === "undefined") { store = true; }
-      var $sentence = cBox._newSt();
+      var $sentence = cBox._newSentence();
       text = cBox.trim(text);
       if (text.length == 0) { return false ;}
 
       if (store === true) {
         cBox.offLogSet(sender,text);
       }
-     // this.DOM['log'].scrollTop = this.DOM['log'].scrollHeight;
+      //Just some crappy templating logic, nothing to see here
       var $words = $sentence.find('[data-attr="words"]');
       var logmsg = $words.text(text).html().replace(/\n/g,'<br/>');
       $words.html(logmsg);
@@ -145,7 +234,7 @@ var cBox = (function(){
       this.DOM['log'].append($sentence);
       if (stickBottom) cBox.DOM['log'][0].scrollTop = cBox.DOM['log'][0].scrollHeight;
     }
-    
+
   }
 
 

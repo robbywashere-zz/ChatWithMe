@@ -23,6 +23,16 @@ $(document).ready(function(){
 
 var misc = {
 
+  supportName: function(from) {
+    var rost = control.socket.roster['support'];
+    var name = (rost[from]['pageAlias']) ? rost[from]['pageAlias'] : rost[from]["name"];
+    return name;
+  },
+
+  supportStatus: function(name,type){ 
+    misc.log('LOG',name + ' changed status to...' + type);
+    hooks["statusChange"](name,type);
+    },
 
   trim: function(str) {
     str = str.replace(/^\s+/, '');
@@ -236,36 +246,34 @@ var events = {
   },
 
 
-  supportStatus: function(name,type){ 
-    misc.log('LOG',name + ' changed status to...' + type);
-    hooks["statusChange"](name,type);
-    },
-
 
   presence: function(xml) {
     var $xml = $(xml);
     var from = Strophe.getBareJidFromJid($xml.attr('from'));
     var rost = control.socket.roster['support'];
-    //    if ((rost.hasOwnProperty(from)) && (rost[from]["name"] === "Support")) {
+
     if ((rost.hasOwnProperty(from)) && (rost[from]).hasOwnProperty("name")) {
-      var name = rost[from]["name"];
+      
+      var name = (rost[from]['pageAlias']) ? rost[from]['pageAlias'] : rost[from]["name"];
       if ($xml.attr('type') === 'unavailable') {
-        events.supportStatus(name,'unavailable');
+        misc.supportStatus(name,'unavailable');
       }
       else {
         var type = $xml.find('show').text();
         if (type.length == 0) { type = 'chat' };
-        events.supportStatus(name,type);
+        misc.supportStatus(name,type);
       }
     }
     return true;
   },
 
   messaged: function(msgObj) {
+      var from = msgObj["from"]
     try { 
-      var name = control.socket.roster['support'][msgObj["from"]]["name"]
+      var name = misc.supportName(from);
     } catch(e) {
-      var name = msgObj["from"];
+      var name = from;
+      misc.log("DEBUG",name + " :error determining support name " + msgObj["body"]);
     }
     misc.log("DEBUG",name + " : " + msgObj["body"]);
     try {
@@ -283,7 +291,8 @@ var events = {
       roster[group] = {};
        roster[group][$el.attr('jid')] = {
         'jid': $el.attr('jid'),
-      'name': $el.attr('name'),
+        'name': $el.attr('name'),
+        'pageAlias': (typeof CWM_SUPPORT_ALIAS !== "undefined") ? CWM_SUPPORT_ALIAS : null,
       'subscription': $el.attr('subscription'),
       };     
     });
