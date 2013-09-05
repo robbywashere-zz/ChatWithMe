@@ -13,9 +13,14 @@ var cBox = (function(){
       this.DOM['chatbox'] = $('[data-container="chatbox"]');
       this.DOM['chatbox-title'] = $('[data-attr="chatbox-title"]');
       this.DOM['title'] = $('title');
-      
 
-        ////////////// Chatbox minimize maximize logic
+
+
+      if (CWM_SUPPORT_ALIAS) { 
+        this.DOM['titlebar'].append(CWM_SUPPORT_ALIAS);
+      }
+
+      ////////////// Chatbox minimize maximize logic
 
       //Retain minimized state of chatbox after window close
       var chatboxstate = (misc.store.get('chatbox-state')) ? true : false;
@@ -38,12 +43,12 @@ var cBox = (function(){
         }
 
       });
-          ///////////// end
+      ///////////// end
 
 
       //make textarea always focus when you click on the chat 'window'
       this.DOM['chatbox'].click(function(){
-        $('textarea:visible').first().focus();
+        $('input[type="text"]:visible, textarea:visible').first().focus();
       })
 
 
@@ -58,6 +63,7 @@ var cBox = (function(){
           if (e.keyCode === 13) {
             var _nick_ = $(this).val();
             control.nickname(_nick_);
+            
             misc.store.set('nickname',_nick_);
             cBox.DOM['nickname-box'].hide();
             cBox.DOM['textarea'].focus();
@@ -109,7 +115,7 @@ var cBox = (function(){
           "unavailable": "offline"
         };
         if (type == 'unavailable') {
-          cBox.DOM['info'].show().text(name + ' is offline');
+          cBox.DOM['info'].show().text(name + ' is offline, but you may still send messages');
         } 
         else {
           if (misc.store.get('nickname') != null) { 
@@ -125,14 +131,12 @@ var cBox = (function(){
     notify: function(state) {
       //notify on
       if ((state) && (!this.DOM['textarea'].is(':focus'))) {
-        this.DOM['chatbox-title'].addClass('notify');
         cBox.titleAlert('New Message');
-        
+
       }
       //notify off
       else {
         cBox.titleAlert(false);
-        this.DOM['chatbox-title'].removeClass('notify');
       }
     },
 
@@ -142,36 +146,45 @@ var cBox = (function(){
 
       var _alt = {};
       var _timer; 
-        _alt.fn1 = fn1;
-        _alt.fn2 = fn2;
-        var arr = [fn1,fn2];
-        var i = 0; 
+      _alt.fn1 = fn1;
+      _alt.fn2 = fn2;
+      var arr = [fn1,fn2];
+      var i = 0; 
 
-        this.start = function() {
-          _timer = setInterval(function() { i++ ; i = i % 2; arr[i]() ; },1000);
-          return this;
-        };
-        this.stop = function() {
-          clearInterval(_timer);
-          if (typeof _alt['fn1'] === "function") { 
-            _alt['fn1']();    
-          } 
-          return this;
-        };
-      },
+      this.start = function() {
+        _timer = setInterval(function() { i++ ; i = i % 2; arr[i]() ; },1000);
+        return this;
+      };
+      this.stop = function() {
+        clearInterval(_timer);
+        if (typeof _alt['fn1'] === "function") { 
+          _alt['fn1']();    
+        } 
+        return this;
+      };
+    },
 
 
     titleAlert: (function() {
-        var _alternator = {};
-        _alternator.stop =  function() {};
+      var _alternator = {};
+      _alternator.stop =  function() {};
       return function(msg) {
-        
+
         _alternator.stop();
         if (!msg) { return; }
         var oldTitle = this.DOM['title'].text();
         var newTitle = msg;
         var _that = this;
-        _alternator = new this.alternate(function(){ _that.DOM['title'].text(oldTitle) },  function() { _that.DOM['title'].text(newTitle)  } ).start();
+
+        var waxon = function(){
+          _that.DOM['title'].text(oldTitle) 
+          Self.DOM['chatbox-title'].removeClass('lightup');
+        };
+        var waxoff = function() {
+          _that.DOM['title'].text(newTitle) 
+          Self.DOM['chatbox-title'].addClass('lightup');
+        }
+        _alternator = new this.alternate(waxon,waxoff).start();
       }
 
     })(),

@@ -170,6 +170,7 @@ var events = {
 
   load: function() {
     control.init();
+
     if (control.restoreUser()) {
       ;
     }
@@ -177,6 +178,7 @@ var events = {
       var profile = control.createProfile();
       control.registerConnect(profile);
     }
+
   },
 
   stropheStatus: function(state) {
