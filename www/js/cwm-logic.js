@@ -9,7 +9,7 @@
 //TODO: come up with better nickname support for both Support and User
 
 
-var DEBUG = false;
+var DEBUG = true;
 var RAW = false;
 var LOG = false;
 
@@ -32,7 +32,7 @@ var misc = {
   supportStatus: function(name,type){ 
     misc.log('LOG',name + ' changed status to...' + type);
     hooks["statusChange"](name,type);
-    },
+  },
 
   trim: function(str) {
     str = str.replace(/^\s+/, '');
@@ -48,7 +48,7 @@ var misc = {
   random: function() { 
     var s4 = function() { return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1); };
     return s4() + s4() + '-' + s4() +  s4();
-    },
+  },
 
 
   log: function(type,msg) {
@@ -60,12 +60,12 @@ var misc = {
     }
   },
 
-    store: {
+  store: {
 
-      set: store.set,
-      get: store.get
+    set: store.set,
+    get: store.get
 
-    }
+  }
 
 
 }
@@ -128,8 +128,22 @@ var control = {
   },
 
   nickname: function(name) {
-    for (var support_contact in control.socket.roster['support']) break;
-    control.socket.send($pres({'from':control.socket.jid,'to':support_contact}).c('nick',{'xmlns':'http://jabber.org/protocol/nick'}).t(name));
+
+    var newHook = function() {
+      for (var support_contact in control.socket.roster['support']) break;
+      control.socket.send($pres({'from':control.socket.jid,'to':support_contact}).c('nick',{'xmlns':'http://jabber.org/protocol/nick'}).t(name));
+    }
+
+    if (!control.socket.connected) {
+      var savedHook = hooks['connected'];
+      hooks['connected'] = function() { savedHook(); newHook(); }
+    }
+
+    else {
+      newHook();
+    }
+
+
   },
 
   connect: function(profile,callback) {
@@ -138,24 +152,40 @@ var control = {
   },
 
 
-  msgSupport: function(msg) {
-    if (!control.socket.connected) { 
-      misc.log("DEBUG","Not connected ");
-      return false
+  sendMsg: function(msg) {
+
+
+    try {
+      if (!control.socket.connected) { 
+        //misc.log("DEBUG","Not connected ");
+        throw 'Not connected '; 
+      }
+      if (typeof control.socket.roster['support'] === "undefined") {
+       // misc.log("DEBUG","Support contact not found");
+        throw 'Support contact not found'; 
+      }
+
+    } catch(e) {
+      misc.log("DEBUG",e);
+      var error_fn = function(fn) {
+        if (fn) fn();
+      };
+      var success_fn = function(fn) {
+        if (fn) fn();
+      };
+      return { error: error_fn , success: success_fn };
     }
-    if (typeof control.socket.roster['support'] === "undefined") {
-      misc.log("DEBUG","Support contact not found");
-      return false;
-    }
+
+
     for (var support_contact in control.socket.roster['support']) break;
     var me = Strophe.getBareJidFromJid(this.socket.jid);
-    var msg = $build('message',{
+    var msgObj = $build('message',{
       to: support_contact,
-      from: me,
-      type: 'chat'
+        from: me,
+        type: 'chat'
     }).c('body').t(msg).tree();
-    var _tmp = this.socket.send(msg);
-    misc.log("DEBUG",msg);
+    var _tmp = this.socket.send(msgObj);
+    misc.log("DEBUG",msgObj);
     return _tmp;
   }
 
@@ -170,13 +200,20 @@ var events = {
 
   load: function() {
     control.init();
+    //Already has nickname
+
+
 
     if (control.restoreUser()) {
       ;
     }
     else {
-      var profile = control.createProfile();
-      control.registerConnect(profile);
+      //Nickname screen state
+      //  var profile = control.createProfile();
+      //  control.registerConnect(profile);
+
+      // or   control.registerConnect(creatProfile);
+
     }
 
   },
@@ -184,11 +221,12 @@ var events = {
   stropheStatus: function(state) {
     if (state == Strophe.Status.CONNECTING) {
       misc.log('DEBUG','Connecting to server...');
+      hooks.connecting();
     } 
     else if (state == Strophe.Status.CONNFAIL) {
       //TODO: reconnect
       misc.log('DEBUG','Connection failed');
-    //  events.disconnected = function() { control.restoreUser(); }
+      //  events.disconnected = function() { control.restoreUser(); }
     } 
     else if (state == Strophe.Status.DISCONNECTING) {
       misc.log('DEBUG','Disconnecting...');
@@ -202,6 +240,7 @@ var events = {
     } 
     else if (state == Strophe.Status.DISCONNECTED) {
       misc.log('DEBUG','Disconnected from server');
+      hooks.disconnected();
       events.disconnected();
     } 
     else if (state == Strophe.Status.CONNECTED) { 
@@ -255,7 +294,7 @@ var events = {
     var rost = control.socket.roster['support'];
 
     if ((rost.hasOwnProperty(from)) && (rost[from]).hasOwnProperty("name")) {
-      
+
       var name = (rost[from]['pageAlias']) ? rost[from]['pageAlias'] : rost[from]["name"];
       if ($xml.attr('type') === 'unavailable') {
         misc.supportStatus(name,'unavailable');
@@ -270,16 +309,16 @@ var events = {
   },
 
   messaged: function(msgObj) {
-      var from = msgObj["from"]
-    try { 
-      var name = misc.supportName(from);
-    } catch(e) {
-      var name = from;
-      misc.log("DEBUG",name + " :error determining support name " + msgObj["body"]);
-    }
+    var from = msgObj["from"]
+      try { 
+        var name = misc.supportName(from);
+      } catch(e) {
+        var name = from;
+        misc.log("DEBUG",name + " :error determining support name " + msgObj["body"]);
+      }
     misc.log("DEBUG",name + " : " + msgObj["body"]);
     try {
-    hooks["message"](name,msgObj["body"]);
+      hooks["message"](name,msgObj["body"]);
     } catch (e) {;}
     return true;
   },
@@ -291,10 +330,10 @@ var events = {
       var $el = $(this);
       var group = $el.find('group').text() || 'Unknown';
       roster[group] = {};
-       roster[group][$el.attr('jid')] = {
+      roster[group][$el.attr('jid')] = {
         'jid': $el.attr('jid'),
-        'name': $el.attr('name'),
-        'pageAlias': (typeof CWM_SUPPORT_ALIAS !== "undefined") ? CWM_SUPPORT_ALIAS : null,
+      'name': $el.attr('name'),
+      'pageAlias': (typeof CWM_SUPPORT_ALIAS !== "undefined") ? CWM_SUPPORT_ALIAS : null,
       'subscription': $el.attr('subscription'),
       };     
     });
@@ -316,17 +355,19 @@ var events = {
 
   registerSuccess: function(profile) {
     misc.log("DEBUG","Registered as " + profile["username"]);
-    
+
     control.storeProfile(profile);
     control.connect(profile,this.stropheStatus);
   }
 
 
-  };
+};
 
 
 var hooks = { 
   message: function(){},
   statusChange: function(){},
-  connected: function(){}
+  connected: function(){},
+  disconnected: function(){},
+  connecting: function(){}
 };

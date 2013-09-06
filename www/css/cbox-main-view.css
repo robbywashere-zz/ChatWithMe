@@ -79,6 +79,9 @@ div.convo {
   overflow-y: scroll;
 }
 
+div.convo .sentence.error {
+  color:#CCC;
+}
 
 .chat-box textarea {
   width:328px;

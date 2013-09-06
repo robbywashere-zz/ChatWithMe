@@ -85,6 +85,11 @@ div.convo {
   font:normal normal 11px/1.4 Tahoma,Verdana,Sans-Serif;
 }
 
+div.convo .sentence.error {
+  color:#AAA;
+  font-style:italic;
+}
+
 .chat-box textarea {
   width:178px;
   padding:5px;
@@ -148,7 +153,7 @@ div.convo {
 }
 
 
-.icon.loading {
+.icon.connecting {
   background: url('images/loading.gif');
   background-size:contain;
   padding-right:5px;

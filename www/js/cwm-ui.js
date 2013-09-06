@@ -63,12 +63,25 @@ var cBox = (function(){
           if (e.keyCode === 13) {
             var _nick_ = $(this).val();
             control.nickname(_nick_);
-            
+
             misc.store.set('nickname',_nick_);
             cBox.DOM['nickname-box'].hide();
             cBox.DOM['textarea'].focus();
+
+
+
             $(this).unbind('keydown');
-            return false;
+
+            //Create generic profile and connect
+            control.registerConnect(control.createProfile());
+
+            //Greet user 
+
+            var greeting = 'Hello ' + _nick_ + ' ! Welcome :) ';
+
+        cBox.DOM['log'].append($('<em>' + greeting + '</em>'));
+
+        return false;
           }
         });
         cBox.DOM['nickname-box'].show();
@@ -80,20 +93,41 @@ var cBox = (function(){
       }
       $('[data-attr="textarea"]').keydown(function(e){
         if ((e.keyCode === 13) && (!e.originalEvent.shiftKey)) {
-          cBox.logMsg('Me',$(this).val());
-          control.msgSupport($(this).val());
+
+          var msg = $(this).val();
+
+          var result = control.sendMsg(msg);
+
+          var $sentence = cBox.logMsg('Me',msg);  
+
+          result.error(function(){ 
+            var _error = true;
+            // cBox.logMsg('Me',$(this).val(),_error);
+            $sentence.log(_error);
+            $sentence.el.addClass('error');  
+          }).success(function(){
+            $sentence.log(false);
+          });
+
           $(this).val('');
           return false;
         }
 
       });
 
+      hooks["disconnected"] = function() { 
+        cBox.DOM['info'].show().text('You are not connected');
+      };
+
+      hooks["connecting"] = function() { 
+        cBox.showConnecting();
+      };
 
       hooks["message"] = function(name,msg) { 
         //accounting for carbons - or new tabs
         if (name == Strophe.getBareJidFromJid(control.socket.jid)) {
           name = "Me";
-          cBox.logMsg(name,msg,false);
+          cBox.logMsg(name,msg);
         }
         else {
           //Message is from someone else, trigger notify
@@ -125,6 +159,13 @@ var cBox = (function(){
         }
         cBox.userStatus(codes[type]); 
       }
+    },
+
+    showConnecting: function() {
+      cBox.userStatus('connecting');
+      //  cBox.DOM['info'].show().text('Connecting...');
+      var savedHook = hooks['connected'];
+      hooks['connected'] = function() { savedHook(); cBox.DOM['info'].hide().text(''); }
     },
 
     //true or false - is - on or off
@@ -178,11 +219,11 @@ var cBox = (function(){
 
         var waxon = function(){
           _that.DOM['title'].text(oldTitle) 
-          Self.DOM['chatbox-title'].removeClass('lightup');
+      Self.DOM['chatbox-title'].removeClass('lightup');
         };
         var waxoff = function() {
           _that.DOM['title'].text(newTitle) 
-          Self.DOM['chatbox-title'].addClass('lightup');
+      Self.DOM['chatbox-title'].addClass('lightup');
         }
         _alternator = new this.alternate(waxon,waxoff).start();
       }
@@ -191,10 +232,16 @@ var cBox = (function(){
 
     DOM: {},
 
-    offLogSet: function(sender,text) {
+    offLogSet: function(sender,text,error) {
       var limit = 25;
       var offline = misc.store.get('offlineLog') || [];
-      offline.unshift([sender,text]);
+
+
+      var textarr = [sender,text];
+      if (error) { textarr.push(error); }
+
+
+      offline.unshift(textarr);
       if (offline.length>0) offline = offline.slice(0,limit);
       misc.store.set('offlineLog',offline);
     },
@@ -205,7 +252,8 @@ var cBox = (function(){
         var msgArr = offline[i];
         var from = msgArr[0] || ' ';
         var msg = msgArr[1] || ' ';
-        cBox.logMsg(from,msg,false)
+        var $el = cBox.logMsg(from,msg).el
+        if (msgArr[2]) { $el.addClass('error'); }
       }
     },
 
@@ -226,15 +274,22 @@ var cBox = (function(){
       return str;
     },
     offline: function(){ return true; },
-    logMsg: function(sender,text,store) {
+    logMsg: function(sender,text) {
+
+      if (typeof text === "object") {
+        var error  = text.error;
+        var text = text.msg;
+      }
+
+
       if (typeof store === "undefined") { store = true; }
+
       var $sentence = cBox._newSentence();
       text = cBox.trim(text);
       if (text.length == 0) { return false ;}
 
-      if (store === true) {
-        cBox.offLogSet(sender,text);
-      }
+
+
       //Just some crappy templating logic, nothing to see here
       var $words = $sentence.find('[data-attr="words"]');
       var logmsg = $words.text(text).html().replace(/\n/g,'<br/>');
@@ -246,6 +301,18 @@ var cBox = (function(){
       }
       this.DOM['log'].append($sentence);
       if (stickBottom) cBox.DOM['log'][0].scrollTop = cBox.DOM['log'][0].scrollHeight;
+
+      var returnable = {
+        'el': $sentence,
+        'log': function(error) {
+           var _err = !!(error);
+          cBox.offLogSet(sender,text,_err); 
+          }
+
+
+      } 
+      return returnable;
+      
     }
 
   }
