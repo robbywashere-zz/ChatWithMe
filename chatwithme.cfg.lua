@@ -32,3 +32,4 @@ register_json_ports = {
 
 ------------ HTTP Servlet ----------
 http_ports = { 8080 }
+http_path = "/Users/robby/Projects/ChatWithMe/www"

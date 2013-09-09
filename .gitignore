@@ -1,0 +1,5 @@
+
+prosody.cfg.distro.lua
+prosody.err
+prosody.log
+prosody.pid

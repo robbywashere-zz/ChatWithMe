@@ -1,3 +1,5 @@
+
+
 var cBox = (function(){
   var Self = {
 
@@ -13,6 +15,28 @@ var cBox = (function(){
       this.DOM['chatbox'] = $('[data-container="chatbox"]');
       this.DOM['chatbox-title'] = $('[data-attr="chatbox-title"]');
       this.DOM['title'] = $('title');
+      this.DOM['menu-button'] = $('.cwm-menu .menu-button');
+      this.DOM['menu'] = $('.cwm-menu-container');
+
+      this.DOM['menu-action'] = $('.cwm-menu [data-action]');
+
+
+
+
+     //Menu Logic
+     this.DOM['menu-button'].click(function(){ $('.cwm-menu-container').toggle();return false });
+     this.DOM['menu'].click(function(){ $(this).hide(); });
+     this.DOM['menu-action'].click(function(k,v){ 
+      var ACTION = $(this).data('action');
+      
+      if (ACTION === "clear") { misc.store.set('offlineLog',null); Self.DOM['log'].html(''); }
+      if (ACTION === "disconnect") { control.socket.disconnect();  }
+      if (ACTION === "connect") { control.restoreUser();  }
+
+
+     });
+
+
 
 
 
@@ -49,11 +73,12 @@ var cBox = (function(){
       //make textarea always focus when you click on the chat 'window'
       this.DOM['chatbox'].click(function(){
         $('input[type="text"]:visible, textarea:visible').first().focus();
+        Self.notify(false);
       })
 
 
       this.DOM['textarea'].focus(function(){
-        Self.notify(false);
+        //Self.notify(false);
       });
 
 
@@ -115,9 +140,13 @@ var cBox = (function(){
 
       });
 
+
+
       hooks["disconnected"] = function() { 
+        cBox.userStatus('offline');
         cBox.DOM['info'].show().text('You are not connected');
       };
+      
 
       hooks["connecting"] = function() { 
         cBox.showConnecting();

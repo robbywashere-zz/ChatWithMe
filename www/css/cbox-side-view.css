@@ -1,4 +1,40 @@
 
+.menu-button:hover {
+  color:#FFF;
+  cursor:pointer;
+}
+.menu-button {
+font-weight:bold;
+color:#24F;
+position:absolute;
+top:0;
+right:10px;
+float:left;
+}
+
+.cwm-menu-container button {
+width:90%;
+line-height:20px;
+margin:10px;
+}
+
+.cwm-menu-container ul {
+padding:0;
+list-style:none;
+}
+.cwm-menu-container {
+display:none;
+position:absolute;
+background:#FFF;
+font-size:14px;
+text-align:center;
+line-height:24px;
+width:100%;
+height:100%;
+opacity:0.8;
+}
+
+
 .nickname .container {
   margin-top:50px;
 }
@@ -9,13 +45,14 @@ padding-bottom:5px;
 text-align:center;
 
 }
-.chat-box .nickname{
+.chat-box .nickname {
 text-align:center;
 position:absolute;
 background:#FFF;
 width:100%;
 height:100%;
 }
+
 
 div.chat-box.minimize {
   height:20px;

@@ -9,7 +9,7 @@
 //TODO: come up with better nickname support for both Support and User
 
 
-var DEBUG = true;
+var DEBUG = false;
 var RAW = false;
 var LOG = false;
 
@@ -45,6 +45,11 @@ var misc = {
     return str;
   },
 
+  addHook: function(name,fn) {
+    var oldHook = hooks[name];
+    var newHook = function() { oldHook.apply(this,arguments); fn.apply(this,arguments); };
+    hooks[name] = newHook; 
+  },
   random: function() { 
     var s4 = function() { return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1); };
     return s4() + s4() + '-' + s4() +  s4();
@@ -169,9 +174,10 @@ var control = {
       misc.log("DEBUG",e);
       var error_fn = function(fn) {
         if (fn) fn();
+        return this;
       };
-      var success_fn = function(fn) {
-        if (fn) fn();
+      var success_fn = function() {
+        //Do nothing nope sorry
       };
       return { error: error_fn , success: success_fn };
     }

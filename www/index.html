@@ -13,46 +13,59 @@
           <link rel="stylesheet" href="css/cbox-side-view.css">
           <script src="js/vendor/jquery-1.8.2.min.js"></script>
           <script src="js/cwm-ui.js"></script>
+          <script src="js/magic.js"></script>
           <script src="js/util.js"></script>
           <script type="text/javascript">
             CWM_SUPPORT_ALIAS='Robby';
-          </script>
-        </head>
-        <body>
+            </script>
+          </head>
+          <body>
 
 
-          <div class="chat-box minimize" data-container="chatbox">
-            <div class="chat-box-title" data-attr="chatbox-title">
-              <div data-attr="status-icon" class="status-icon icon offline"></div>
-              <div class="caption" data-attr="titlebar">Chat With&nbsp;</div>
-            </div>
-            <div class="chat-box-content">
-              <div class="nickname" data-attr="nickname-box">
-                <div class="container">
-                  <div>
-                    <label for="nickname">Hello! What is your name?</label>
-                    <input data-attr="nickname" type="text" name="nickname"></input>
+            <div class="chat-box minimize" data-container="chatbox">
+              <div class="chat-box-title" data-attr="chatbox-title">
+                <div data-attr="status-icon" class="status-icon icon offline"></div>
+                <div class="caption" data-attr="titlebar">Chat With&nbsp;</div>
+              </div>
+              <div class="chat-box-content">
+                <div class="cwm-menu" data-attr="cwm-menu">
+                  <div class="menu-button">[+]</div>
+                  <div class="cwm-menu-container" data-attr="cwm-menu">
+                    <ul>
+                      <li><button data-action="clear">Clear Log</button></li>
+                      <li><button data-action="disconnect">Disconnect</button></li>
+                      <li><button data-action="none">Cancel</button></li>
+                    </ul>
+
+
                   </div>
                 </div>
-              </div>
-              <div data-attr="log" class="convo">
-                <div class="sentence" data-attr="sentence">
-                  <span class="icon" data-attr="icon"></span><span data-attr="sender" class="sender">SENDER:</span>
-                  <span data-attr="words" class="words">MSG</span>
+                <div class="nickname" data-attr="nickname-box">
+                  <div class="container">
+                    <div>
+                      <label for="nickname">Hello! What is your name?</label>
+                      <input data-attr="nickname" type="text" name="nickname"></input>
+                    </div>
+                  </div>
                 </div>
+                <div data-attr="log" class="convo">
+                  <div class="sentence" data-attr="sentence">
+                    <span class="icon" data-attr="icon"></span><span data-attr="sender" class="sender">SENDER:</span>
+                    <span data-attr="words" class="words">MSG</span>
+                  </div>
+                </div>
+                <div data-attr="info" class="info" style="display:none">Info...</div>
+                <textarea data-attr="textarea"></textarea>
               </div>
-              <div data-attr="info" class="info" style="display:none">Info...</div>
-              <textarea data-attr="textarea"></textarea>
+
             </div>
 
-          </div>
+            <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+            <![endif]-->
 
-          <!--[if lt IE 7]>
-          <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
-          <![endif]-->
-
-        </body>
-        <script src="js/vendor/strophe.js"></script>
-        <script src="js/vendor/store+json2.min.js"></script>
-        <script src="js/cwm-logic.js"></script>
-      </html>
+          </body>
+          <script src="js/vendor/strophe.js"></script>
+          <script src="js/vendor/store+json2.min.js"></script>
+          <script src="js/cwm-logic.js"></script>
+        </html>
