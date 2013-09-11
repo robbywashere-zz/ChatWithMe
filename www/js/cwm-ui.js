@@ -83,7 +83,7 @@ var cBox = (function(){
 
 
       $('[data-attr="sentence"]').remove();
-      if (misc.store.get('nickname') == null) { 
+      if ((misc.store.get('nickname') == null) || (misc.store.get('profile') == null)) { 
         this.DOM['nickname'].bind('keydown',function(e){
           if (e.keyCode === 13) {
             var _nick_ = $(this).val();
@@ -352,6 +352,10 @@ var cBox = (function(){
 
 })();
 
-$(document).ready(function(){
-  cBox.init();
+depsReady(function() {
+  $(document).ready(function(){
+    cBox.init();
+  });
 });
+
+CWM_DEPEND();
