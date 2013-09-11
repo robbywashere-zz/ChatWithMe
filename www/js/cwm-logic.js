@@ -9,7 +9,7 @@
 //TODO: come up with better nickname support for both Support and User
 
 
-var DEBUG = false;
+var DEBUG = true;
 var RAW = false;
 var LOG = false;
 

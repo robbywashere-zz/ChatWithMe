@@ -3,6 +3,29 @@
 var cBox = (function(){
   var Self = {
 
+    DOM: {},
+
+
+    toggle: function(state) {
+
+
+      //true enabled, false disabled
+      if (typeof state == "boolean") {
+        misc.store.set('abled',state);
+      };
+
+      var _curr = misc.store.get('abled');
+      misc.store.set('abled',!_curr);
+      console.log(_curr);
+
+      if (!_curr) { 
+        if (control.socket.connected) control.socket.disconnect(); 
+      }
+      else if (!control.socket.connected) control.restoreUser(); 
+
+    },
+
+
     init: function() {
       this.DOM['sentence_template'] = $('[data-attr="sentence"]');
       this.DOM['info'] = $('[data-attr="info"]');
@@ -23,18 +46,19 @@ var cBox = (function(){
 
 
 
-     //Menu Logic
-     this.DOM['menu-button'].click(function(){ $('.cwm-menu-container').toggle();return false });
-     this.DOM['menu'].click(function(){ $(this).hide(); });
-     this.DOM['menu-action'].click(function(k,v){ 
-      var ACTION = $(this).data('action');
-      
-      if (ACTION === "clear") { misc.store.set('offlineLog',null); Self.DOM['log'].html(''); }
-      if (ACTION === "disconnect") { control.socket.disconnect();  }
-      if (ACTION === "connect") { control.restoreUser();  }
+      //Menu Logic
+      this.DOM['menu-button'].click(function(){ $('.cwm-menu-container').toggle();return false });
+      this.DOM['menu'].click(function(){ $(this).hide(); });
+      this.DOM['menu-action'].click(function(k,v){ 
+        var ACTION = $(this).data('action');
+
+        if (ACTION === "clear") { misc.store.set('offlineLog',null); Self.DOM['log'].html(''); }
+        if (ACTION === "disconnect") { control.socket.disconnect();  }
+        if (ACTION === "connect") { control.restoreUser();  }
+        if (ACTION === "toggle") { Self.toggle();  }
 
 
-     });
+      });
 
 
 
@@ -47,7 +71,7 @@ var cBox = (function(){
       ////////////// Chatbox minimize maximize logic
 
       //Retain minimized state of chatbox after window close
-      var chatboxstate = (misc.store.get('chatbox-state')) ? true : false;
+      var chatboxstate = (misc.store.get('chatbox-minimize')) ? true : false;
 
       //initialize page with stored state
       if (chatboxstate) Self.DOM['chatbox'].removeClass('minimize');
@@ -56,7 +80,7 @@ var cBox = (function(){
       this.DOM['chatbox-title'].click(function(){ 
         //change and store state 
         chatboxstate = !chatboxstate;
-        misc.store.set('chatbox-state',chatboxstate);
+        misc.store.set('chatbox-minimize',chatboxstate);
 
         if (chatboxstate) {
           Self.DOM['chatbox'].removeClass('minimize');
@@ -146,7 +170,7 @@ var cBox = (function(){
         cBox.userStatus('offline');
         cBox.DOM['info'].show().text('You are not connected');
       };
-      
+
 
       hooks["connecting"] = function() { 
         cBox.showConnecting();
@@ -259,7 +283,6 @@ var cBox = (function(){
 
     })(),
 
-    DOM: {},
 
     offLogSet: function(sender,text,error) {
       var limit = 25;
@@ -282,7 +305,7 @@ var cBox = (function(){
         var from = msgArr[0] || ' ';
         var msg = msgArr[1] || ' ';
         var $el = cBox.logMsg(from,msg).el
-        if (msgArr[2]) { $el.addClass('error'); }
+          if (msgArr[2]) { $el.addClass('error'); }
       }
     },
 
@@ -334,14 +357,14 @@ var cBox = (function(){
       var returnable = {
         'el': $sentence,
         'log': function(error) {
-           var _err = !!(error);
+          var _err = !!(error);
           cBox.offLogSet(sender,text,_err); 
-          }
+        }
 
 
       } 
       return returnable;
-      
+
     }
 
   }
