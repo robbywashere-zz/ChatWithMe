@@ -199,7 +199,31 @@ div.convo .sentence.error {
   background-repeat: no-repeat;
 }
 
+div.chat-box.full-window {
+  height:auto;
+  width: auto;
+  top: 0;
+  left: 0;
+}
 
+.full-window div.chat-box-content {
+  height:100%;
+}
+.full-window div.keyboard {
+  height:90%;
+  width:100%;
+}
+.full-window textarea {
+  height:100px;
+  width:100%;
+  padding:0;
+  margin:0;  
+  bottom:0;
+}
+.full-window div.convo {
+padding:0;
+height:50%;
 
+}
 
 

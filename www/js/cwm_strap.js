@@ -41,7 +41,6 @@ $(document).ready(function(){
 
     });
     var scriptsFull = scriptsArr.join("\n");
-    console.log(scriptsFull);
     $('html').append(scriptsFull);
 
   }
@@ -50,7 +49,8 @@ $(document).ready(function(){
     $('body').append(data);
     fetchScripts();
   };
-  $.ajax({url: CWM_DOMAIN + '/partial.html', dataType:'jsonp'});
+ // $.ajax({url: CWM_DOMAIN + '/partial.html', dataType:'jsonp'});
+  $('body').load( CWM_DOMAIN + '/partial.html',function(){ fetchScripts() });
 
 
 });

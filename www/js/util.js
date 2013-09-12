@@ -1,4 +1,22 @@
 var UTIL = {
+
+  throttle: function( ms, freq, fn ) {
+
+    var hits = 0;
+    var _timer = new UTIL.timer(ms,function(){ if (hits == freq) { this.start() }; hits = 0; });
+    var _returnable =  function() { 
+      if ((hits < freq) && (_timer.status > -1)) { hits++; fn.apply(this,arguments); return _timer }
+      else {
+      //  _timer.debounce();
+        return _timer
+      }
+    };
+    _returnable.cancel = function() { _timer.cancel(); return this; }
+    _returnable.start =  function() { _timer.start(); return this; }
+
+    return _returnable;
+  }, 
+
   timer: function(ms) {
 
            var self = this;
@@ -44,7 +62,17 @@ var UTIL = {
              }
            };
 
-           self.jump = function() { _final() };
+
+//var checkData = function() { console.log(data) }; var data = "Derp"; var _timer = UTIL.timer(1000,function(){ checkData(); _timer.start() }).start()
+
+/*
+           self.throttle = function(freq) {
+             var _timer = function(){};
+             return new UTIL.timer(1000,function(){ self._callback();  _timer.start() }).start();
+          };
+*/
+
+          self.jump = function() { _final() };
 
            self.reset = function() {
              //if (typeof arguments[0] == "function") { self._callback = arguments[0]}
@@ -67,7 +95,7 @@ var UTIL = {
              if (self.status === 1) {
                _ms = ms;
                self._callback = cb;
-               console.log(_timeout);
+ //              console.log(_timeout);
                self.status = -1;
                self.start();
                return self;
