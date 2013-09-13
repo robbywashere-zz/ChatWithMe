@@ -8,20 +8,17 @@
 
 //TODO: come up with better nickname support for both Support and User
 
+(function($){
 
-var DEBUG = false;
+
+
+
+var DEBUG = !true;
 var RAW = false;
 var LOG = false;
 
 
-
-$(document).ready(function(){
-  events.load();
-});
-
-
-
-var misc = {
+window.misc = {
 
   supportName: function(from) {
     var rost = control.socket.roster['support'];
@@ -75,10 +72,10 @@ var misc = {
 
 }
 
-var control = {
+window.control = {
 
   init: function() {
-    this.socket = new Strophe.Connection('/xmpp-httpbind');
+    this.socket = new Strophe.Connection(CWM_BIND);
     if (RAW === true) {
       this.socket.rawInput = function(data){ console.log('>>>',data) };
       this.socket.rawOutput = function(data){ console.log('<<<',data) };
@@ -128,7 +125,7 @@ var control = {
   },
 
   register: function(profile) {
-    var req_obj = $.post('/register',JSON.stringify({'username':profile['username'],'password':profile['password'],'host':profile['host']}))
+    var req_obj = $.post(CWM_DOMAIN + '/register',JSON.stringify({'username':profile['username'],'password':profile['password'],'host':profile['host']}))
       return req_obj;
   },
 
@@ -152,6 +149,9 @@ var control = {
   },
 
   connect: function(profile,callback) {
+    if (this.socket.connected) {
+      misc.log('DEBUG','Already Connected, Aborting...');
+    }
     misc.log('DEBUG',"Connecting with:" + JSON.stringify(profile));
     this.socket.connect(profile['jid'],profile['password'],callback);
   },
@@ -197,7 +197,7 @@ var control = {
 
 };
 
-var events = {
+window.events = {
 
   init: function() {
 
@@ -218,7 +218,7 @@ var events = {
       //  var profile = control.createProfile();
       //  control.registerConnect(profile);
 
-      // or   control.registerConnect(creatProfile);
+       control.registerConnect(control.createProfile);
 
     }
 
@@ -370,10 +370,21 @@ var events = {
 };
 
 
-var hooks = { 
+window.hooks = { 
   message: function(){},
   statusChange: function(){},
   connected: function(){},
   disconnected: function(){},
   connecting: function(){}
 };
+
+
+//EXECUTE NOW....
+
+depsReady(function(){
+  events.load();
+});
+
+CWM_DEPEND();
+
+})(window.jQuery);

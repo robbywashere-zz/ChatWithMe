@@ -1,33 +1,41 @@
+<div class="chat-box minimize" data-container="chatbox">  <div class="chat-box-title" data-attr="chatbox-title">
+    <div data-attr="status-icon" class="status-icon icon offline"></div>
+    <div class="caption" data-attr="titlebar">Chat With&nbsp;</div>  </div>  <div class="chat-box-content">
+    <div class="cwm-menu" data-attr="cwm-menu">
+      <div class="menu-button">[+]</div>
+      <div class="cwm-menu-container" data-attr="cwm-menu">
 
-<link rel="stylesheet" href="css/cbox-side-view.css">
-<script src="js/cwm-ui.js"></script>
-<script src="js/util.js"></script>
-<script type="text/javascript">
-  CWM_SUPPORT_ALIAS='Robby';
-</script>
-<div class="chat-box minimize" data-container="chatbox">
-  <div class="chat-box-title" data-attr="chatbox-title">
-    <div data-attr="status-icon" class="status-icon icon loading"></div>
-    <div class="caption" data-attr="titlebar">Chat With&nbsp;</div>
-  </div>
-  <div class="chat-box-content">
+        <ul>
+
+          <li><button data-action="clear">Clear Log</button></li>
+
+          <li><button data-action="disconnect">Disconnect</button></li>
+
+          <li><button data-action="disable">Disable</button></li> <li><button data-action="none">Cancel</button></li>
+        </ul>
+      </div>
+    </div>
     <div class="nickname" data-attr="nickname-box">
       <div class="container">
+
         <div>
+
           <label for="nickname">Hello! What is your name?</label>
+
           <input data-attr="nickname" type="text" name="nickname"></input>
+
         </div>
       </div>
     </div>
     <div data-attr="log" class="convo">
       <div class="sentence" data-attr="sentence">
+
         <span class="icon" data-attr="icon"></span><span data-attr="sender" class="sender">SENDER:</span>
+
         <span data-attr="words" class="words">MSG</span>
       </div>
     </div>
-    <div data-attr="info" class="info" style="display:none">Info...</div>
-    <textarea data-attr="textarea"></textarea>
-  </div>
-
-</div>
-
+    <div class="keyboard">
+      <div data-attr="info" class="info" style="display:none">Info...</div>
+      <textarea data-attr="textarea"></textarea>  </div></div>
+  <div>
