@@ -8,13 +8,17 @@
 
 //TODO: come up with better nickname support for both Support and User
 
+(function($){
 
-var DEBUG = true;
+
+
+
+var DEBUG = !true;
 var RAW = false;
 var LOG = false;
 
 
-var misc = {
+window.misc = {
 
   supportName: function(from) {
     var rost = control.socket.roster['support'];
@@ -68,7 +72,7 @@ var misc = {
 
 }
 
-var control = {
+window.control = {
 
   init: function() {
     this.socket = new Strophe.Connection(CWM_BIND);
@@ -193,7 +197,7 @@ var control = {
 
 };
 
-var events = {
+window.events = {
 
   init: function() {
 
@@ -366,7 +370,7 @@ var events = {
 };
 
 
-var hooks = { 
+window.hooks = { 
   message: function(){},
   statusChange: function(){},
   connected: function(){},
@@ -382,3 +386,5 @@ depsReady(function(){
 });
 
 CWM_DEPEND();
+
+})(window.jQuery);

@@ -1,6 +1,7 @@
 
+(function($){
 
-var cBox = (function(){
+window.cBox = (function(){
   var Self = {
 
     isScrollBottom: function() {
@@ -79,13 +80,14 @@ var cBox = (function(){
                 Self.DOM['textarea'].blur();
               }
 
+              return false;
             });
             ///////////// end
 
 
             //make textarea always focus when you click on the chat 'window'
             this.DOM['chatbox'].click(function(){
-              $('input[type="text"]:visible, textarea:visible').first().focus();
+              Self.DOM['chatbox'].find('input[type="text"]:visible, textarea:visible').first().focus();
               Self.notify(false);
             })
 
@@ -374,3 +376,4 @@ return Self;
   });
 
   CWM_DEPEND();
+})(window.jQuery);

@@ -1,4 +1,5 @@
 
+(function($){
 depsReady(function(){
 
   misc.addHook('message',function(name,msg){ 
@@ -14,3 +15,4 @@ depsReady(function(){
 })
 
 CWM_DEPEND();
+})(window.jQuery);

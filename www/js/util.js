@@ -1,4 +1,6 @@
-var UTIL = {
+
+(function($){
+window.UTIL = {
 
   throttle: function( ms, freq, fn ) {
 
@@ -174,3 +176,5 @@ var UTIL = {
 }
 
 CWM_DEPEND();
+})(window.jQuery);
+

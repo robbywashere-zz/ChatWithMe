@@ -1,17 +1,12 @@
 CWM_SUPPORT_ALIAS='Robby';
-CWM_DOMAIN = 'http://localhost:8080';
-CWM_BIND = 'http://localhost:8080/xmpp-httpbind';
+CWM_DOMAIN = 'http://localhost/chatwithme';
+CWM_BIND = 'http://localhost/chatwithme/xmpp-httpbind';
 
-$(document).ready(function(){
+jQuery(document).ready(function($){
 
-  //  var CMW_DOMAIN = 'http://localhost:8080';
-
-
- // window.depsReady = { 'fn': function(){} };
   var fnStack = function(){};
 
   window.depsReady = function(fn) {
-    //var oldHook = fnStack['fn'];
     var oldHook = fnStack;
     var newHook = function() { oldHook.apply(this,arguments); fn.apply(this,arguments); };
     fnStack = newHook;
@@ -49,8 +44,8 @@ $(document).ready(function(){
     $('body').append(data);
     fetchScripts();
   };
- // $.ajax({url: CWM_DOMAIN + '/partial.html', dataType:'jsonp'});
-  $('body').load( CWM_DOMAIN + '/partial.html',function(){ fetchScripts() });
+
+  $.get( CWM_DOMAIN + '/partial.html',function(data){ $('body').append(data); fetchScripts() });
 
 
 });
