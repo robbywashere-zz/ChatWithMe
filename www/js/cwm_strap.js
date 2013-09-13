@@ -1,7 +1,3 @@
-CWM_SUPPORT_ALIAS='Robby';
-CWM_DOMAIN = 'http://localhost/chatwithme';
-CWM_BIND = 'http://localhost/chatwithme/xmpp-httpbind';
-
 jQuery(document).ready(function($){
 
   var fnStack = function(){};
