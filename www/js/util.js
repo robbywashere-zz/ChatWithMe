@@ -65,14 +65,6 @@ window.UTIL = {
            };
 
 
-//var checkData = function() { console.log(data) }; var data = "Derp"; var _timer = UTIL.timer(1000,function(){ checkData(); _timer.start() }).start()
-
-/*
-           self.throttle = function(freq) {
-             var _timer = function(){};
-             return new UTIL.timer(1000,function(){ self._callback();  _timer.start() }).start();
-          };
-*/
 
           self.jump = function() { _final() };
 
