@@ -7,9 +7,11 @@ if (window.location.host === "localhost:8080") {
 
 (function($){
 
-jQuery.ajax({cache:false,async:true})
+$.ajax({cache:false,async:true})
 
-  var fnStack = function(){};
+  var fnStack = function(){
+    $('.chat-box').show();
+  };
 
   window.depsReady = function(fn) {
     var oldHook = fnStack;
