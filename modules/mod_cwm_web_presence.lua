@@ -26,7 +26,7 @@ local set_realm_name = module:get_option_string("reg_servlet_realm", "Restricted
 local throttle_time = module:get_option_number("reg_servlet_time", nil)
 local whitelist = module:get_option_set("reg_servlet_wl", {})
 local blacklist = module:get_option_set("reg_servlet_bl", {})
-local ports = module:get_option_array("reg_servlet_ports", {{ port = 9280 }})
+local ports = module:get_option_array("reg_servlet_ports", {{ port = 8080 }})
 local recent_ips = {}
 
 -- Begin
@@ -45,54 +45,54 @@ local function handle_req(method, body, request)
 
     local req_body = {}
     parsequery(request.url.query,req_body)
---    return http_response(202,table.tostring(tbl)) 
+    --    return http_response(202,table.tostring(tbl)) 
 
---    if not pcall(function() req_body = json_decode(body) end) then
---    module:log("debug", "JSON data submitted for user registration by %s failed to Decode.", user)
---    return http_response(400, "JSON Decoding failed.")
---  end
+    --    if not pcall(function() req_body = json_decode(body) end) then
+    --    module:log("debug", "JSON data submitted for user registration by %s failed to Decode.", user)
+    --    return http_response(400, "JSON Decoding failed.")
+    --  end
 
-  --req_body = json_decode(body)
+    --req_body = json_decode(body)
 
-  if req_body['user'] and req_body['host'] then
-    local user = req_body["user"]
-    local host = req_body["host"]
-    local status,message
+    if req_body['user'] and req_body['host'] then
+      local user = req_body["user"]
+      local host = req_body["host"]
+      local status,message
 
 
-    if user and host then
-      local user_sessions = hosts[host] and hosts[host].sessions[user];
-      if user_sessions then
-        status = user_sessions.top_resources[1];
-        if status and status.presence then
-          message = status.presence:child_with_name("status");
-          status = status.presence:child_with_name("show");
-          if not status then
-            status = "online";
-          else
-            status = status:get_text();
-          end
-          if message then
-            message = message:get_text();
+      if user and host then
+        local user_sessions = hosts[host] and hosts[host].sessions[user];
+        if user_sessions then
+          status = user_sessions.top_resources[1];
+          if status and status.presence then
+            message = status.presence:child_with_name("status");
+            status = status.presence:child_with_name("show");
+            if not status then
+              status = "online";
+            else
+              status = status:get_text();
+            end
+            if message then
+              message = message:get_text();
+            end
           end
         end
       end
+
+      status = status or "offline"
+
+
+      local json_resp = json_encode({ status = status })
+      local json_header = { ["Content-Type"] = "application/json" }
+
+      return http_response(200, json_resp , json_header)
+
+
+    else
+      return http_response(400, "Must provide user and host parameters")
     end
 
-    status = status or "offline"
-
-
-    local json_resp = json_encode({ status = status })
-    local json_header = { ["Content-Type"] = "application/json" }
-
-    return http_response(200, json_resp , json_header)
-
-
-  else
-    return http_response(400, "Must provide user and host parameters")
   end
-
-end
 
 
 
@@ -215,17 +215,13 @@ end
 -- Set it up!
 
 function setup()
-  for id, options in ipairs(ports) do 
-    if not options.port then 
-      if not options.ssl then ports[id].port = 9280
-      else ports[id].port = 9443 end
-    elseif options.port == 9280 and options.ssl then ports[id].port = 9443 end end
-    httpserver.new_from_config(ports, handle_req, { base = "status" })
-  end
+  httpserver.new_from_config(ports, handle_req, { base = "status" })
+end
 
   if prosody.start_time then -- already started
     setup()
   else
     module:hook("server-started", setup)
   end
+
 

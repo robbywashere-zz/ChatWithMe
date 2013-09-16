@@ -42,6 +42,13 @@ function overwrite(filename,withdata)
   file_handle:close()
 end
 
+function restore_backup_from(backup_file,to_config_file)
+  if not file_exists(backup_file) then
+    error('Could not open prosody config file')
+  end
+  os.execute('cp ' .. backup_file .. ' ' .. to_config_file)
+end
+
 function backup_current(config_file)
 
   local backup_filename = cmdout('pwd') .. '/prosody.cfg.distro.lua'

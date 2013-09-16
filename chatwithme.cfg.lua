@@ -30,6 +30,15 @@ register_json_ports = {
   }
 }
 
+---- Presence Servlet ----
+reg_servlet_ports = {
+  {
+    port = 8080;
+    path = "status";
+  }
+}
+
 ------------ HTTP Servlet ----------
 http_ports = { 8080 }
 
+http_path = "/Users/robby/Projects/chatwithme/www"
