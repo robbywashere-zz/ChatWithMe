@@ -49,9 +49,8 @@ function restore_backup_from(backup_file,to_config_file)
   os.execute('cp ' .. backup_file .. ' ' .. to_config_file)
 end
 
-function backup_current(config_file)
+function backup_current(config_file,backup_filename)
 
-  local backup_filename = cmdout('pwd') .. '/prosody.cfg.distro.lua'
   log('Backing up ' .. config_file .. ' to ' .. backup_filename)
   if not file_exists(config_file) then
     error('Could not open prosody config file')
@@ -178,7 +177,7 @@ function modify_config(target_file)
   end
 
   local cwm_file = cmdout('pwd') .. '/chatwithme.cfg.lua'
-  build_cwm_config_from(cwm_file)
+  --build_cwm_config_from(cwm_file)
 
 
   local prosody_cfg = slurp(target_file)
@@ -192,7 +191,13 @@ function modify_config(target_file)
   log("Preppending chatWithMe configuration to Prosody configuration:")
   log(target_file)
 
+  local dir = cmdout('pwd') .. '/www'
+  local http_path_str = 'http_path = "' .. dir .. '"'
+  --Custom Config here
   overwrite(target_file,cwm_cfg)
+  append_to(target_file,http_path_str)
+
+  --Now add old config
   append_to(target_file,prosody_cfg)
 
 
@@ -246,27 +251,33 @@ function add_modules_enabled(config_file)
 
   local target_file = env_table['cfg_dir'] .. '/prosody.cfg.lua'
 
-  backup_current(target_file)
+  local backup_filename = cmdout('pwd') .. '/prosody.cfg.distro.lua'
 
-  copy_modules_to(env_table['mod_dir'])
+  if arg[1] == "--restore" then
 
-  modify_config(target_file)
+    restore_backup_from(backup_filename,target_file)
 
+  else 
+    backup_current(target_file,backup_filename)
 
+    copy_modules_to(env_table['mod_dir'])
 
-  log('Installation complete.')
+    modify_config(target_file)
 
-  log('Add support user with:')
+    log('Installation complete.')
 
-  log('$> prosodyctl adduser support@<HOST-NAME>')
+    log('Add support user with:')
 
-  log('OR for local testing try something like: $> prosodyctl adduser support@localhost')
+    log('$> prosodyctl adduser support@<HOST-NAME>')
 
-  log('Start your server with:')
+    log('OR for local testing try something like: $> prosodyctl adduser support@localhost')
 
-  log('$> prosodyctl start')
+    log('Start your server with:')
 
-  log('then visit http://localhost:8080')
+    log('$> prosodyctl start')
+
+    log('then visit http://localhost:8080')
+  end
 
 
 

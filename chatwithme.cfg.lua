@@ -40,5 +40,3 @@ reg_servlet_ports = {
 
 ------------ HTTP Servlet ----------
 http_ports = { 8080 }
-
-http_path = "/Users/robby/Projects/chatwithme/www"
