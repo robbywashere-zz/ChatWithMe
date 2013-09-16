@@ -257,6 +257,10 @@ function add_modules_enabled(config_file)
 
     restore_backup_from(backup_filename,target_file)
 
+  elseif arg[1] == "--edit" then
+    
+    os.execute('$EDITOR ' .. target_file)
+
   else 
     backup_current(target_file,backup_filename)
 
