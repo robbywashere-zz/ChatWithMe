@@ -1,8 +1,10 @@
-if (document.location.host === "localhost:8080") {
+if (window.location.host === "localhost:8080") {
   CWM_SUPPORT_ALIAS='Robby';
   CWM_DOMAIN = 'http://localhost:8080';
-  CWM_BIND = 'http://localhost:8080/xmpp-httpbind';
+  CWM_BIND = CWM_DOMAIN + '/xmpp-httpbind';
+  CWM_HOST = 'localhost';
 }
+
 jQuery(document).ready(function($){
 
   var fnStack = function(){};

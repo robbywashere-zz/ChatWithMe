@@ -115,9 +115,7 @@ window.control = {
     var profile = {
       'username': misc.random(),
       'password': misc.random(),
-      //'host': document.location.host,
-      'host': document.location.host.split(':')[0]
-
+      'host': (typeof CWM_HOST !== "undefined") ? CWM_HOST : window.location.hostname
     };
     profile['jid'] = profile['username'] + '@' + profile['host'];
     misc.log('DEBUG','Created profile: ' + JSON.stringify(profile));
