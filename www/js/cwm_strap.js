@@ -33,7 +33,7 @@ jQuery.ajax({cache:false,async:true})
 
    // scriptsArr = [];
 
- //   scriptsArr.push("<link rel='stylesheet' href='" + CWM_DOMAIN + "/css/cbox-side-view.css'>");
+    $('body').append("<link rel='stylesheet' href='" + CWM_DOMAIN + "/css/cbox-side-view.css'>");
 
 
     $.each(scripts,function(i,val){
