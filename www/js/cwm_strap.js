@@ -20,6 +20,7 @@ jQuery.ajax({cache:false,async:true})
 
   var scripts = ['/js/vendor/strophe.js','/js/vendor/store+json2.min.js','/js/cwm-logic.js','/js/cwm-ui.js','/js/magic.js','/js/util.js'];
   var _deps = 0;
+
   CWM_DEPEND = function() {
     _deps++;
     if (_deps == scripts.length) {
@@ -30,18 +31,18 @@ jQuery.ajax({cache:false,async:true})
 
   var fetchScripts = function(){ 
 
-    scriptsArr = [];
+   // scriptsArr = [];
 
-    scriptsArr.push("<link rel='stylesheet' href='" + CWM_DOMAIN + "/css/cbox-side-view.css'>");
+ //   scriptsArr.push("<link rel='stylesheet' href='" + CWM_DOMAIN + "/css/cbox-side-view.css'>");
 
 
     $.each(scripts,function(i,val){
-      var tag = '<script type="text/javascript" src="' + CWM_DOMAIN + val + '"></script>';
-      scriptsArr.push(tag);
-
+      //var tag = '<script type="text/javascript" src="' + CWM_DOMAIN + val + '"></script>';
+     // scriptsArr.push(tag);
+      $.getScript(val);
     });
-    var scriptsFull = scriptsArr.join("\n");
-    $('html').append(scriptsFull);
+   // var scriptsFull = scriptsArr.join("\n");
+    //$('html').append(scriptsFull);
 
   }
 
