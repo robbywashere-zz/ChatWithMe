@@ -39,7 +39,7 @@ jQuery.ajax({cache:false,async:true})
     $.each(scripts,function(i,val){
       //var tag = '<script type="text/javascript" src="' + CWM_DOMAIN + val + '"></script>';
      // scriptsArr.push(tag);
-      $.getScript(val);
+      $.getScript(CWM_DOMAIN + val);
     });
    // var scriptsFull = scriptsArr.join("\n");
     //$('html').append(scriptsFull);
