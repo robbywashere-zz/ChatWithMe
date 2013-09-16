@@ -5,7 +5,9 @@ if (window.location.host === "localhost:8080") {
   CWM_HOST = 'localhost';
 }
 
-jQuery(document).ready(function($){
+(function($){
+
+jQuery.ajax({cache:false,async:true})
 
   var fnStack = function(){};
 
@@ -51,5 +53,5 @@ jQuery(document).ready(function($){
   $.get( CWM_DOMAIN + '/partial.html',function(data){ $('body').append(data); fetchScripts() });
 
 
-});
+})(jQuery);
 
