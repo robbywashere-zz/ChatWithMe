@@ -1,6 +1,6 @@
 Fireside.logic = (function($){
 
-  var DEBUG = !true;
+  var DEBUG = false;
   var RAW = false;
   var LOG = false;
 
@@ -9,14 +9,14 @@ Fireside.logic = (function($){
   Self.misc = {
 
     supportName: function(from) {
-      var rost = Self.control.socket.roster['support'];
+      var rost = Self.socket.roster['support'];
       var name = (rost[from]['pageAlias']) ? rost[from]['pageAlias'] : rost[from]["name"];
       return name;
     },
 
 supportStatus: function(name,type){ 
   Self.misc.log('LOG',name + ' changed status to...' + type);
-  hooks["statusChange"](name,type);
+  Self.hooks["statusChange"](name,type);
 },
 
   trim: function(str) {
@@ -31,9 +31,9 @@ supportStatus: function(name,type){
   },
 
   addHook: function(name,fn) {
-    var oldHook = hooks[name];
+    var oldHook = Self.hooks[name];
     var newHook = function() { oldHook.apply(this,arguments); fn.apply(this,arguments); };
-    hooks[name] = newHook; 
+    Self.hooks[name] = newHook; 
   },
   random: function() { 
     var s4 = function() { return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1); };
@@ -62,8 +62,8 @@ supportStatus: function(name,type){
 
 Self.control = {
 
-  init: function() {
-    Self.socket = new Strophe.Connection(CWM_BIND);
+  init: function(options) {
+    this.socket = new Strophe.Connection(options.domain + options.bind);
     if (RAW === true) {
       Self.socket.rawInput = function(data){ console.log('>>>',data) };
       Self.socket.rawOutput = function(data){ console.log('<<<',data) };
@@ -86,7 +86,6 @@ Self.control = {
   registerConnect: function(profile) {
     Self.control.register(profile)
       .success(function(){ Self.events.registerSuccess(profile) });
-    //TODO: .error(function(data) { console.log(profile); Self.events.registerFail(data) });
   },
 
   restoreUser: function() {
@@ -115,7 +114,7 @@ Self.control = {
     var profile = {
       'username': Self.misc.random(),
       'password': Self.misc.random(),
-      'host': (typeof CWM_HOST !== "undefined") ? CWM_HOST : window.location.hostname
+      'host': (typeof options.host !== "undefined") ? options.host : window.location.hostname
     };
     profile['jid'] = profile['username'] + '@' + profile['host'];
     Self.misc.log('DEBUG','Created profile: ' + JSON.stringify(profile));
@@ -123,20 +122,20 @@ Self.control = {
   },
 
   register: function(profile) {
-    var req_obj = $.post(CWM_DOMAIN + '/register',JSON.stringify({'username':profile['username'],'password':profile['password'],'host':profile['host']}))
+    var req_obj = $.post(options.domain + '/register',JSON.stringify({'username':profile['username'],'password':profile['password'],'host':profile['host']}))
       return req_obj;
   },
 
   nickname: function(name) {
 
     var newHook = function() {
-      for (var support_contact in Self.control.socket.roster['support']) break;
-      Self.control.socket.send($pres({'from':Self.control.socket.jid,'to':support_contact}).c('nick',{'xmlns':'http://jabber.org/protocol/nick'}).t(name));
+      for (var support_contact in Self.socket.roster['support']) break;
+      Self.socket.send($pres({'from':Self.socket.jid,'to':support_contact}).c('nick',{'xmlns':'http://jabber.org/protocol/nick'}).t(name));
     }
 
-    if (!Self.control.socket.connected) {
-      var savedHook = hooks['connected'];
-      hooks['connected'] = function() { savedHook(); newHook(); }
+    if (!Self.socket.connected) {
+      var savedHook = Self.hooks['connected'];
+      Self.hooks['connected'] = function() { savedHook(); newHook(); }
     }
 
     else {
@@ -159,11 +158,11 @@ Self.control = {
 
 
     try {
-      if (!Self.control.socket.connected) { 
+      if (!Self.socket.connected) { 
         //Self.misc.log("DEBUG","Not connected ");
         throw 'Not connected '; 
       }
-      if (typeof Self.control.socket.roster['support'] === "undefined") {
+      if (typeof Self.socket.roster['support'] === "undefined") {
         // Self.misc.log("DEBUG","Support contact not found");
         throw 'Support contact not found'; 
       }
@@ -181,7 +180,7 @@ Self.control = {
     }
 
 
-    for (var support_contact in Self.control.socket.roster['support']) break;
+    for (var support_contact in Self.socket.roster['support']) break;
     var me = Strophe.getBareJidFromJid(Self.socket.jid);
     var msgObj = $build('message',{
       to: support_contact,
@@ -204,7 +203,7 @@ Self.events = {
   stropheStatus: function(state) {
     if (state == Strophe.Status.CONNECTING) {
       Self.misc.log('DEBUG','Connecting to server...');
-      hooks.connecting();
+      Self.hooks.connecting();
     } 
     else if (state == Strophe.Status.CONNFAIL) {
       //TODO: reconnect
@@ -223,19 +222,19 @@ Self.events = {
     } 
     else if (state == Strophe.Status.DISCONNECTED) {
       Self.misc.log('DEBUG','Disconnected from server');
-      hooks.disconnected();
+      Self.hooks.disconnected();
       Self.events.disconnected();
     } 
     else if (state == Strophe.Status.CONNECTED) { 
       Self.misc.log('DEBUG','Connected to server');
       Self.events.connected();
-      hooks.connected();
+      Self.hooks.connected();
     }
 
   },
 
   authFailed: function() {
-    Self.control.socket.disconnect();
+    Self.socket.disconnect();
     this.disconnected = function() {
       Self.control.registerConnect(Self.control.createProfile());
       //TODO: add re-connection Self.control
@@ -274,7 +273,7 @@ Self.events = {
   presence: function(xml) {
     var $xml = $(xml);
     var from = Strophe.getBareJidFromJid($xml.attr('from'));
-    var rost = Self.control.socket.roster['support'];
+    var rost = Self.socket.roster['support'];
 
     if ((rost.hasOwnProperty(from)) && (rost[from]).hasOwnProperty("name")) {
 
@@ -301,7 +300,7 @@ Self.events = {
       }
     Self.misc.log("DEBUG",name + " : " + msgObj["body"]);
     try {
-      hooks["message"](name,msgObj["body"]);
+      Self.hooks["message"](name,msgObj["body"]);
     } catch (e) {;}
     return true;
   },
@@ -316,23 +315,23 @@ Self.events = {
       roster[group][$el.attr('jid')] = {
         'jid': $el.attr('jid'),
       'name': $el.attr('name'),
-      'pageAlias': (typeof CWM_SUPPORT_ALIAS !== "undefined") ? CWM_SUPPORT_ALIAS : null,
+      'pageAlias': (typeof options.supportAlias !== "undefined") ? options.supportAlias : null,
       'subscription': $el.attr('subscription'),
       };     
     });
-    Self.control.socket.roster = roster;
+    Self.socket.roster = roster;
 
   },
 
   connected: function() {
-    Self.control.socket.addHandler(Self.events._onMsg, null, 'message', null, null,  null);
-    Self.control.socket.addHandler(Self.events.presence,null,'presence',null, null, null);
-    Self.control.socket.sendIQ($iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'}),function(data){
+    Self.socket.addHandler(Self.events._onMsg, null, 'message', null, null,  null);
+    Self.socket.addHandler(Self.events.presence,null,'presence',null, null, null);
+    Self.socket.sendIQ($iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'}),function(data){
       Self.events.roster(data);
     });
 
-    Self.control.socket.send($iq({type:'set',id:'enablecarbons'}).c('enable', {xmlns: 'urn:xmpp:carbons:2'}).tree());
-    Self.control.socket.send($pres().tree());
+    Self.socket.send($iq({type:'set',id:'enablecarbons'}).c('enable', {xmlns: 'urn:xmpp:carbons:2'}).tree());
+    Self.socket.send($pres().tree());
 
   },
 

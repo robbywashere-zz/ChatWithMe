@@ -1,4 +1,4 @@
-Fireside.init = function(){
-  Fireside.logic.init();
-  Fireside.ui.init();
+Fireside.init = function(options){
+  Fireside.logic.init(options);
+  Fireside.ui.init(options);
 };

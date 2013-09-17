@@ -1,8 +1,20 @@
 /*global module:false*/
 module.exports = function(grunt) {
 
+
+
+
+  // Load in `grunt-spritesmith`
+
   // Project configuration.
   grunt.initConfig({
+    sprite:{
+      all: {
+        src: 'www/images/*.png',
+        destImg: 'www/images/spritesheet.png',
+        destCSS: 'www/css/sprites.css'
+      }
+    },
     pkg: grunt.file.readJSON('package.json'),
   // Metadata.
   meta: {
@@ -11,7 +23,7 @@ module.exports = function(grunt) {
 
   banner: '/*! <%= pkg.name %> - v<%= meta.version %> - ' +
              '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-             '* http://<%= pkg.homepage %>/\n' +
+             '* <%= pkg.homepage %>\n' +
              '* Copyright (c) <%= grunt.template.today("yyyy") %> ' +
              '<%= pkg.author %>; Licensed MIT */\n',
     // Task configuration.
@@ -19,7 +31,7 @@ module.exports = function(grunt) {
       options: {
         banner: '<%= banner %>',
         stripBanners: true,
-        footer: ';Fireside.css = ' + JSON.stringify(grunt.file.read('www/css/cbox-side-view.css')) + ';Fireside.template = ' + JSON.stringify(grunt.file.read('www/partial.html')) + '; Fireside.init();',
+        footer: ';Fireside.css = ' + JSON.stringify(grunt.file.read('www/css/cbox-side-view.css')) + ';Fireside.template = ' + JSON.stringify(grunt.file.read('www/partial.html')) + ';',
       },
     dist: {
   src: [  
@@ -79,8 +91,7 @@ module.exports = function(grunt) {
 cssmin: {
   minify: {
     expand: true,
-    src: ['cbox-side-view.css'],
-    dest: 'Fireside.css',
+    src: ['www/css/cbox-side-view.css','www/css/sprites.css'],
     ext: '.min.css'
   }
 }
@@ -94,8 +105,9 @@ cssmin: {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-spritesmith');
 
   // Default task.
-  grunt.registerTask('default', ['cssmin','jshint', 'concat', 'uglify']);
+  grunt.registerTask('default', ['sprite','cssmin','jshint', 'concat', 'uglify']);
 
 };

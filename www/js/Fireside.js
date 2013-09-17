@@ -1,5 +1,5 @@
 /*! Fireside - v0.1.0 - 2013-09-17
-* http://http://www.github.com/robbywashere/fireside/
+* http://www.github.com/robbywashere/fireside
 * Copyright (c) 2013 Robby; Licensed MIT */
 this.JSON||(this.JSON={}),function(){function f(e){return e<10?"0"+e:e}function quote(e){return escapable.lastIndex=0,escapable.test(e)?'"'+e.replace(escapable,function(e){var t=meta[e];return typeof t=="string"?t:"\\u"+("0000"+e.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+e+'"'}function str(e,t){var n,r,i,s,o=gap,u,a=t[e];a&&typeof a=="object"&&typeof a.toJSON=="function"&&(a=a.toJSON(e)),typeof rep=="function"&&(a=rep.call(t,e,a));switch(typeof a){case"string":return quote(a);case"number":return isFinite(a)?String(a):"null";case"boolean":case"null":return String(a);case"object":if(!a)return"null";gap+=indent,u=[];if(Object.prototype.toString.apply(a)==="[object Array]"){s=a.length;for(n=0;n<s;n+=1)u[n]=str(n,a)||"null";return i=u.length===0?"[]":gap?"[\n"+gap+u.join(",\n"+gap)+"\n"+o+"]":"["+u.join(",")+"]",gap=o,i}if(rep&&typeof rep=="object"){s=rep.length;for(n=0;n<s;n+=1)r=rep[n],typeof r=="string"&&(i=str(r,a),i&&u.push(quote(r)+(gap?": ":":")+i))}else for(r in a)Object.hasOwnProperty.call(a,r)&&(i=str(r,a),i&&u.push(quote(r)+(gap?": ":":")+i));return i=u.length===0?"{}":gap?"{\n"+gap+u.join(",\n"+gap)+"\n"+o+"}":"{"+u.join(",")+"}",gap=o,i}}typeof Date.prototype.toJSON!="function"&&(Date.prototype.toJSON=function(e){return isFinite(this.valueOf())?this.getUTCFullYear()+"-"+f(this.getUTCMonth()+1)+"-"+f(this.getUTCDate())+"T"+f(this.getUTCHours())+":"+f(this.getUTCMinutes())+":"+f(this.getUTCSeconds())+"Z":null},String.prototype.toJSON=Number.prototype.toJSON=Boolean.prototype.toJSON=function(e){return this.valueOf()});var cx=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,escapable=/[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,gap,indent,meta={"\b":"\\b","	":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"},rep;typeof JSON.stringify!="function"&&(JSON.stringify=function(e,t,n){var r;gap="",indent="";if(typeof n=="number")for(r=0;r<n;r+=1)indent+=" ";else typeof n=="string"&&(indent=n);rep=t;if(!t||typeof t=="function"||typeof t=="object"&&typeof t.length=="number")return str("",{"":e});throw new Error("JSON.stringify")}),typeof JSON.parse!="function"&&(JSON.parse=function(text,reviver){function walk(e,t){var n,r,i=e[t];if(i&&typeof i=="object")for(n in i)Object.hasOwnProperty.call(i,n)&&(r=walk(i,n),r!==undefined?i[n]=r:delete i[n]);return reviver.call(e,t,i)}var j;text=String(text),cx.lastIndex=0,cx.test(text)&&(text=text.replace(cx,function(e){return"\\u"+("0000"+e.charCodeAt(0).toString(16)).slice(-4)}));if(/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,"@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,"]").replace(/(?:^|:|,)(?:\s*\[)+/g,"")))return j=eval("("+text+")"),typeof reviver=="function"?walk({"":j},""):j;throw new SyntaxError("JSON.parse")})}(),function(){function o(){try{return r in t&&t[r]}catch(e){return!1}}var e={},t=window,n=t.document,r="localStorage",i="__storejs__",s;e.disabled=!1,e.set=function(e,t){},e.get=function(e){},e.remove=function(e){},e.clear=function(){},e.transact=function(t,n,r){var i=e.get(t);r==null&&(r=n,n=null),typeof i=="undefined"&&(i=n||{}),r(i),e.set(t,i)},e.getAll=function(){},e.serialize=function(e){return JSON.stringify(e)},e.deserialize=function(e){if(typeof e!="string")return undefined;try{return JSON.parse(e)}catch(t){return e||undefined}};if(o())s=t[r],e.set=function(t,n){return n===undefined?e.remove(t):(s.setItem(t,e.serialize(n)),n)},e.get=function(t){return e.deserialize(s.getItem(t))},e.remove=function(e){s.removeItem(e)},e.clear=function(){s.clear()},e.getAll=function(){var t={};for(var n=0;n<s.length;++n){var r=s.key(n);t[r]=e.get(r)}return t};else if(n.documentElement.addBehavior){var u,a;try{a=new ActiveXObject("htmlfile"),a.open(),a.write('<script>document.w=window</script><iframe src="/favicon.ico"></iframe>'),a.close(),u=a.w.frames[0].document,s=u.createElement("div")}catch(f){s=n.createElement("div"),u=n.body}function l(t){return function(){var n=Array.prototype.slice.call(arguments,0);n.unshift(s),u.appendChild(s),s.addBehavior("#default#userData"),s.load(r);var i=t.apply(e,n);return u.removeChild(s),i}}var c=new RegExp("[!\"#$%&'()*+,/\\\\:;<=>?@[\\]^`{|}~]","g");function h(e){return e.replace(c,"___")}e.set=l(function(t,n,i){return n=h(n),i===undefined?e.remove(n):(t.setAttribute(n,e.serialize(i)),t.save(r),i)}),e.get=l(function(t,n){return n=h(n),e.deserialize(t.getAttribute(n))}),e.remove=l(function(e,t){t=h(t),e.removeAttribute(t),e.save(r)}),e.clear=l(function(e){var t=e.XMLDocument.documentElement.attributes;e.load(r);for(var n=0,i;i=t[n];n++)e.removeAttribute(i.name);e.save(r)}),e.getAll=l(function(t){var n=t.XMLDocument.documentElement.attributes,r={};for(var i=0,s;s=n[i];++i){var o=h(s.name);r[s.name]=e.deserialize(t.getAttribute(o))}return r})}try{e.set(i,i),e.get(i)!=i&&(e.disabled=!0),e.remove(i)}catch(f){e.disabled=!0}e.enabled=!e.disabled,typeof module!="undefined"&&module.exports?module.exports=e:typeof define=="function"&&define.amd?define(e):this.store=e}()
 
@@ -3834,7 +3834,7 @@ return Self;
 
 Fireside.logic = (function($){
 
-  var DEBUG = !true;
+  var DEBUG = false;
   var RAW = false;
   var LOG = false;
 
@@ -3843,14 +3843,14 @@ Fireside.logic = (function($){
   Self.misc = {
 
     supportName: function(from) {
-      var rost = Self.control.socket.roster['support'];
+      var rost = Self.socket.roster['support'];
       var name = (rost[from]['pageAlias']) ? rost[from]['pageAlias'] : rost[from]["name"];
       return name;
     },
 
 supportStatus: function(name,type){ 
   Self.misc.log('LOG',name + ' changed status to...' + type);
-  hooks["statusChange"](name,type);
+  Self.hooks["statusChange"](name,type);
 },
 
   trim: function(str) {
@@ -3865,9 +3865,9 @@ supportStatus: function(name,type){
   },
 
   addHook: function(name,fn) {
-    var oldHook = hooks[name];
+    var oldHook = Self.hooks[name];
     var newHook = function() { oldHook.apply(this,arguments); fn.apply(this,arguments); };
-    hooks[name] = newHook; 
+    Self.hooks[name] = newHook; 
   },
   random: function() { 
     var s4 = function() { return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1); };
@@ -3896,8 +3896,8 @@ supportStatus: function(name,type){
 
 Self.control = {
 
-  init: function() {
-    Self.socket = new Strophe.Connection(CWM_BIND);
+  init: function(options) {
+    this.socket = new Strophe.Connection(options.domain + options.bind);
     if (RAW === true) {
       Self.socket.rawInput = function(data){ console.log('>>>',data) };
       Self.socket.rawOutput = function(data){ console.log('<<<',data) };
@@ -3920,7 +3920,6 @@ Self.control = {
   registerConnect: function(profile) {
     Self.control.register(profile)
       .success(function(){ Self.events.registerSuccess(profile) });
-    //TODO: .error(function(data) { console.log(profile); Self.events.registerFail(data) });
   },
 
   restoreUser: function() {
@@ -3949,7 +3948,7 @@ Self.control = {
     var profile = {
       'username': Self.misc.random(),
       'password': Self.misc.random(),
-      'host': (typeof CWM_HOST !== "undefined") ? CWM_HOST : window.location.hostname
+      'host': (typeof options.host !== "undefined") ? options.host : window.location.hostname
     };
     profile['jid'] = profile['username'] + '@' + profile['host'];
     Self.misc.log('DEBUG','Created profile: ' + JSON.stringify(profile));
@@ -3957,20 +3956,20 @@ Self.control = {
   },
 
   register: function(profile) {
-    var req_obj = $.post(CWM_DOMAIN + '/register',JSON.stringify({'username':profile['username'],'password':profile['password'],'host':profile['host']}))
+    var req_obj = $.post(options.domain + '/register',JSON.stringify({'username':profile['username'],'password':profile['password'],'host':profile['host']}))
       return req_obj;
   },
 
   nickname: function(name) {
 
     var newHook = function() {
-      for (var support_contact in Self.control.socket.roster['support']) break;
-      Self.control.socket.send($pres({'from':Self.control.socket.jid,'to':support_contact}).c('nick',{'xmlns':'http://jabber.org/protocol/nick'}).t(name));
+      for (var support_contact in Self.socket.roster['support']) break;
+      Self.socket.send($pres({'from':Self.socket.jid,'to':support_contact}).c('nick',{'xmlns':'http://jabber.org/protocol/nick'}).t(name));
     }
 
-    if (!Self.control.socket.connected) {
-      var savedHook = hooks['connected'];
-      hooks['connected'] = function() { savedHook(); newHook(); }
+    if (!Self.socket.connected) {
+      var savedHook = Self.hooks['connected'];
+      Self.hooks['connected'] = function() { savedHook(); newHook(); }
     }
 
     else {
@@ -3993,11 +3992,11 @@ Self.control = {
 
 
     try {
-      if (!Self.control.socket.connected) { 
+      if (!Self.socket.connected) { 
         //Self.misc.log("DEBUG","Not connected ");
         throw 'Not connected '; 
       }
-      if (typeof Self.control.socket.roster['support'] === "undefined") {
+      if (typeof Self.socket.roster['support'] === "undefined") {
         // Self.misc.log("DEBUG","Support contact not found");
         throw 'Support contact not found'; 
       }
@@ -4015,7 +4014,7 @@ Self.control = {
     }
 
 
-    for (var support_contact in Self.control.socket.roster['support']) break;
+    for (var support_contact in Self.socket.roster['support']) break;
     var me = Strophe.getBareJidFromJid(Self.socket.jid);
     var msgObj = $build('message',{
       to: support_contact,
@@ -4038,7 +4037,7 @@ Self.events = {
   stropheStatus: function(state) {
     if (state == Strophe.Status.CONNECTING) {
       Self.misc.log('DEBUG','Connecting to server...');
-      hooks.connecting();
+      Self.hooks.connecting();
     } 
     else if (state == Strophe.Status.CONNFAIL) {
       //TODO: reconnect
@@ -4057,19 +4056,19 @@ Self.events = {
     } 
     else if (state == Strophe.Status.DISCONNECTED) {
       Self.misc.log('DEBUG','Disconnected from server');
-      hooks.disconnected();
+      Self.hooks.disconnected();
       Self.events.disconnected();
     } 
     else if (state == Strophe.Status.CONNECTED) { 
       Self.misc.log('DEBUG','Connected to server');
       Self.events.connected();
-      hooks.connected();
+      Self.hooks.connected();
     }
 
   },
 
   authFailed: function() {
-    Self.control.socket.disconnect();
+    Self.socket.disconnect();
     this.disconnected = function() {
       Self.control.registerConnect(Self.control.createProfile());
       //TODO: add re-connection Self.control
@@ -4108,7 +4107,7 @@ Self.events = {
   presence: function(xml) {
     var $xml = $(xml);
     var from = Strophe.getBareJidFromJid($xml.attr('from'));
-    var rost = Self.control.socket.roster['support'];
+    var rost = Self.socket.roster['support'];
 
     if ((rost.hasOwnProperty(from)) && (rost[from]).hasOwnProperty("name")) {
 
@@ -4135,7 +4134,7 @@ Self.events = {
       }
     Self.misc.log("DEBUG",name + " : " + msgObj["body"]);
     try {
-      hooks["message"](name,msgObj["body"]);
+      Self.hooks["message"](name,msgObj["body"]);
     } catch (e) {;}
     return true;
   },
@@ -4150,23 +4149,23 @@ Self.events = {
       roster[group][$el.attr('jid')] = {
         'jid': $el.attr('jid'),
       'name': $el.attr('name'),
-      'pageAlias': (typeof CWM_SUPPORT_ALIAS !== "undefined") ? CWM_SUPPORT_ALIAS : null,
+      'pageAlias': (typeof options.supportAlias !== "undefined") ? options.supportAlias : null,
       'subscription': $el.attr('subscription'),
       };     
     });
-    Self.control.socket.roster = roster;
+    Self.socket.roster = roster;
 
   },
 
   connected: function() {
-    Self.control.socket.addHandler(Self.events._onMsg, null, 'message', null, null,  null);
-    Self.control.socket.addHandler(Self.events.presence,null,'presence',null, null, null);
-    Self.control.socket.sendIQ($iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'}),function(data){
+    Self.socket.addHandler(Self.events._onMsg, null, 'message', null, null,  null);
+    Self.socket.addHandler(Self.events.presence,null,'presence',null, null, null);
+    Self.socket.sendIQ($iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'}),function(data){
       Self.events.roster(data);
     });
 
-    Self.control.socket.send($iq({type:'set',id:'enablecarbons'}).c('enable', {xmlns: 'urn:xmpp:carbons:2'}).tree());
-    Self.control.socket.send($pres().tree());
+    Self.socket.send($iq({type:'set',id:'enablecarbons'}).c('enable', {xmlns: 'urn:xmpp:carbons:2'}).tree());
+    Self.socket.send($pres().tree());
 
   },
 
@@ -4221,15 +4220,17 @@ Fireside.ui = (function($){
       console.log(_curr);
 
       if (!_curr) { 
-        if (Fireside.logic.control.socket.connected) Fireside.logic.control.socket.disconnect(); 
+        if (Fireside.logic.socket.connected) Fireside.logic.socket.disconnect(); 
       }
-      else if (!Fireside.logic.control.socket.connected) Fireside.logic.control.restoreUser(); 
+      else if (!Fireside.logic.socket.connected) Fireside.logic.control.restoreUser(); 
 
     },
 
 
-  init: function() {
+  init: function(options) {
     $('body').append(Fireside.template);
+    $('html').append('<style>' + Fireside.css + '</style');
+
     this.DOM['sentence_template'] = $('[data-attr="sentence"]');
     this.DOM['info'] = $('[data-attr="info"]');
     this.DOM['log'] = $('[data-attr="log"]');
@@ -4264,7 +4265,7 @@ Fireside.ui = (function($){
       var ACTION = $(this).data('action');
 
       if (ACTION === "clear") { Fireside.logic.misc.store.set('offlineLog',null); Self.DOM['log'].html(''); }
-      if (ACTION === "disconnect") { Fireside.logic.control.socket.disconnect();  }
+      if (ACTION === "disconnect") { Fireside.logic.socket.disconnect();  }
       if (ACTION === "connect") { Fireside.logic.control.restoreUser();  }
       if (ACTION === "toggle") { Self.toggle();  }
 
@@ -4272,8 +4273,8 @@ Fireside.ui = (function($){
     });
 
 
-    if (CWM_SUPPORT_ALIAS) { 
-      this.DOM['titlebar'].append(CWM_SUPPORT_ALIAS);
+    if (options.supportAlias) { 
+      this.DOM['titlebar'].append(options.supportAlias);
     }
 
     ////////////// Chatbox minimize maximize logic
@@ -4387,7 +4388,7 @@ Fireside.ui = (function($){
 
     Fireside.logic.hooks["message"] = function(name,msg) { 
       //accounting for carbons - or new tabs
-      if (name == Strophe.getBareJidFromJid(Fireside.logic.control.socket.jid)) {
+      if (name == Strophe.getBareJidFromJid(Fireside.logic.socket.jid)) {
         name = "Me";
         Self.logMsg(name,msg);
       }
@@ -4585,8 +4586,8 @@ return Self;
 
 
 
-Fireside.init = function(){
-  Fireside.logic.init();
-  Fireside.ui.init();
+Fireside.init = function(options){
+  Fireside.logic.init(options);
+  Fireside.ui.init(options);
 };
-;Fireside.css = "\n.menu-button:hover {\n  color:#FFF;\n  cursor:pointer;\n}\n.menu-button {\nfont-weight:bold;\ncolor:#24F;\nposition:absolute;\ntop:0;\nright:10px;\nfloat:left;\n}\n\n.cwm-menu-container button {\nwidth:90%;\nline-height:20px;\nmargin:10px;\n}\n\n.cwm-menu-container ul {\nmargin:0;\npadding:0;\nlist-style:none;\n}\n.cwm-menu-container {\ndisplay:none;\nposition:absolute;\nbackground:#FFF;\nfont-size:14px;\ntext-align:center;\nline-height:24px;\nwidth:100%;\nheight:100%;\nopacity:0.8;\n}\n\n\n.nickname .container {\n  margin-top:50px;\n}\n.nickname label{\ndisplay:block;\nwidth:100%;\npadding-bottom:5px;\ntext-align:center;\n\n}\n.chat-box .nickname {\ntext-align:center;\nposition:absolute;\nbackground:#FFF;\nwidth:100%;\nheight:100%;\n}\n\n\ndiv.chat-box.minimize {\n  height:20px;\n}\n\n.chat-box-title.lightup {\n  background-color: #88EEFF;\n}\n\n.chat-box-title {\n  width:100%;\n  cursor:pointer;\n  line-height:20px;\n  background:#44AADD;\n  vertical-align:middle;\n}\n.chat-box-title:hover {\n  background:#66CCFF;\n}\n.chat-box-title .icon {\n  float:left;\n  margin: 3px;\n}\n.chat-box-title .caption {\n  font-weight:bold;\n  color:white;\n}\n.chat-box {\n  border-top-left-radius:5px;\n  border-top-right-radius:5px;\n  font:normal normal 11px/1.4 Tahoma,Verdana,Sans-Serif;\n  color:#333;\n  width:100px; \n  border:1px solid #344150;\n  border-bottom:none;\n  background-color:white;\n  position:fixed;\n  right:10px;\n  bottom:0;\n  z-index:9999;\n  -webkit-box-shadow:1px 1px 5px rgba(0,0,0,.2);\n  -moz-box-shadow:1px 1px 5px rgba(0,0,0,.2);\n  box-shadow:1px 1px 5px rgba(0,0,0,.2);\n}\n\n.chat-box .sender {\n  font-weight:bold;\n  padding-right:5px;\n}\n\n.sentence span {\n  display:inline;\n}\n.sentence {\n  word-wrap:break-word;\n}\n\ndiv.convo {\n  height: 150px; \n  padding:0px 10px 5px 10px;\n  overflow-y: scroll;\n}\n\n.chat-box {\n  width:200px;\n  border:1px solid #CCC;\n  font:normal normal 11px/1.4 Tahoma,Verdana,Sans-Serif;\n}\n\ndiv.convo .sentence.error {\n  color:#AAA;\n  font-style:italic;\n}\n\n.chat-box textarea {\n  width:178px;\n  padding:5px;\n  margin-left:5px;\n  height:50px;\n  margin-bottom:5px;\n  resize:none;\n}\n\n\n.chat-box-content .info {\n  border-top: 1px dashed #CCC; \n  color:#AAA;\n  padding: 5px 5px 5px 5px;\n}\n\n\n.icon.offline {\n  background: url('images/presence_offline.png');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\n.icon.away{\n  background: url('images/presence_away.png');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\n.icon.online {\n  background: url('images/presence_online.png');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\n.icon.busy {\n  background: url('images/presence_busy.png');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\n.icon.error {\n  background: url('images/presence_error.png');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\n\n.icon.connecting {\n  background: url('images/loading.gif');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\ndiv.chat-box.full-window {\n  height:auto;\n  width: auto;\n  top: 0;\n  left: 0;\n}\n\n.full-window div.chat-box-content {\n  height:100%;\n}\n.full-window div.keyboard {\n  height:90%;\n  width:100%;\n}\n.full-window textarea {\n  height:100px;\n  width:100%;\n  padding:0;\n  margin:0;  \n  bottom:0;\n}\n.full-window div.convo {\npadding:0;\nheight:50%;\n\n}\n\n\n";Fireside.template = "<div class=\"chat-box minimize\"  data-container=\"chatbox\">  <div class=\"chat-box-title\" data-attr=\"chatbox-title\">\n    <div data-attr=\"status-icon\" class=\"status-icon icon offline\"></div>\n    <div class=\"caption\" data-attr=\"titlebar\">Chat With&nbsp;</div>  </div>  <div class=\"chat-box-content\">\n    <div class=\"cwm-menu\" data-attr=\"cwm-menu\">\n      <div class=\"menu-button\">[+]</div>\n      <div class=\"cwm-menu-container\" data-attr=\"cwm-menu\">\n\n        <ul>\n\n          <li><button data-action=\"clear\">Clear Log</button></li>\n\n          <li><button data-action=\"disconnect\">Disconnect</button></li>\n\n          <li><button data-action=\"disable\">Disable</button></li> <li><button data-action=\"none\">Cancel</button></li>\n        </ul>\n      </div>\n    </div>\n    <div class=\"nickname\" data-attr=\"nickname-box\">\n      <div class=\"container\">\n\n        <div>\n\n          <label for=\"nickname\">Hello! What is your name?</label>\n\n          <input data-attr=\"nickname\" type=\"text\" name=\"nickname\"></input>\n\n        </div>\n      </div>\n    </div>\n    <div data-attr=\"log\" class=\"convo\">\n      <div class=\"sentence\" data-attr=\"sentence\">\n\n        <span class=\"icon\" data-attr=\"icon\"></span><span data-attr=\"sender\" class=\"sender\">SENDER:</span>\n\n        <span data-attr=\"words\" class=\"words\">MSG</span>\n      </div>\n    </div>\n    <div class=\"keyboard\">\n      <div data-attr=\"info\" class=\"info\" style=\"display:none\">Info...</div>\n      <textarea data-attr=\"textarea\"></textarea>  </div></div>\n  <div>\n"; Fireside.init();
+;Fireside.css = "\n.menu-button:hover {\n  color:#FFF;\n  cursor:pointer;\n}\n.menu-button {\nfont-weight:bold;\ncolor:#24F;\nposition:absolute;\ntop:0;\nright:10px;\nfloat:left;\n}\n\n.cwm-menu-container button {\nwidth:90%;\nline-height:20px;\nmargin:10px;\n}\n\n.cwm-menu-container ul {\nmargin:0;\npadding:0;\nlist-style:none;\n}\n.cwm-menu-container {\ndisplay:none;\nposition:absolute;\nbackground:#FFF;\nfont-size:14px;\ntext-align:center;\nline-height:24px;\nwidth:100%;\nheight:100%;\nopacity:0.8;\n}\n\n\n.nickname .container {\n  margin-top:50px;\n}\n.nickname label{\ndisplay:block;\nwidth:100%;\npadding-bottom:5px;\ntext-align:center;\n\n}\n.chat-box .nickname {\ntext-align:center;\nposition:absolute;\nbackground:#FFF;\nwidth:100%;\nheight:100%;\n}\n\n\ndiv.chat-box.minimize {\n  height:20px;\n}\n\n.chat-box-title.lightup {\n  background-color: #88EEFF;\n}\n\n.chat-box-title {\n  width:100%;\n  cursor:pointer;\n  line-height:20px;\n  background:#44AADD;\n  vertical-align:middle;\n}\n.chat-box-title:hover {\n  background:#66CCFF;\n}\n.chat-box-title .icon {\n  float:left;\n  margin: 3px;\n}\n.chat-box-title .caption {\n  font-weight:bold;\n  color:white;\n}\n.chat-box {\n  border-top-left-radius:5px;\n  border-top-right-radius:5px;\n  font:normal normal 11px/1.4 Tahoma,Verdana,Sans-Serif;\n  color:#333;\n  width:100px; \n  border:1px solid #344150;\n  border-bottom:none;\n  background-color:white;\n  position:fixed;\n  right:10px;\n  bottom:0;\n  z-index:9999;\n  -webkit-box-shadow:1px 1px 5px rgba(0,0,0,.2);\n  -moz-box-shadow:1px 1px 5px rgba(0,0,0,.2);\n  box-shadow:1px 1px 5px rgba(0,0,0,.2);\n}\n\n.chat-box .sender {\n  font-weight:bold;\n  padding-right:5px;\n}\n\n.sentence span {\n  display:inline;\n}\n.sentence {\n  word-wrap:break-word;\n}\n\ndiv.convo {\n  height: 150px; \n  padding:0px 10px 5px 10px;\n  overflow-y: scroll;\n}\n\n.chat-box {\n  width:200px;\n  border:1px solid #CCC;\n  font:normal normal 11px/1.4 Tahoma,Verdana,Sans-Serif;\n}\n\ndiv.convo .sentence.error {\n  color:#AAA;\n  font-style:italic;\n}\n\n.chat-box textarea {\n  width:178px;\n  padding:5px;\n  margin-left:5px;\n  height:50px;\n  margin-bottom:5px;\n  resize:none;\n}\n\n\n.chat-box-content .info {\n  border-top: 1px dashed #CCC; \n  color:#AAA;\n  padding: 5px 5px 5px 5px;\n}\n\n\n.icon.offline {\n  background: url('images/presence_offline.png');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\n.icon.away{\n  background: url('images/presence_away.png');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\n.icon.online {\n  background: url('images/presence_online.png');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\n.icon.busy {\n  background: url('images/presence_busy.png');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\n.icon.error {\n  background: url('images/presence_error.png');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\n\n.icon.connecting {\n  background: url('images/loading.gif');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\ndiv.chat-box.full-window {\n  height:auto;\n  width: auto;\n  top: 0;\n  left: 0;\n}\n\n.full-window div.chat-box-content {\n  height:100%;\n}\n.full-window div.keyboard {\n  height:90%;\n  width:100%;\n}\n.full-window textarea {\n  height:100px;\n  width:100%;\n  padding:0;\n  margin:0;  \n  bottom:0;\n}\n.full-window div.convo {\npadding:0;\nheight:50%;\n\n}\n\n\n";Fireside.template = "<div class=\"chat-box minimize\"  data-container=\"chatbox\">  <div class=\"chat-box-title\" data-attr=\"chatbox-title\">\n    <div data-attr=\"status-icon\" class=\"status-icon icon offline\"></div>\n    <div class=\"caption\" data-attr=\"titlebar\">Chat With&nbsp;</div>  </div>  <div class=\"chat-box-content\">\n    <div class=\"cwm-menu\" data-attr=\"cwm-menu\">\n      <div class=\"menu-button\">[+]</div>\n      <div class=\"cwm-menu-container\" data-attr=\"cwm-menu\">\n\n        <ul>\n\n          <li><button data-action=\"clear\">Clear Log</button></li>\n\n          <li><button data-action=\"disconnect\">Disconnect</button></li>\n\n          <li><button data-action=\"disable\">Disable</button></li> <li><button data-action=\"none\">Cancel</button></li>\n        </ul>\n      </div>\n    </div>\n    <div class=\"nickname\" data-attr=\"nickname-box\">\n      <div class=\"container\">\n\n        <div>\n\n          <label for=\"nickname\">Hello! What is your name?</label>\n\n          <input data-attr=\"nickname\" type=\"text\" name=\"nickname\"></input>\n\n        </div>\n      </div>\n    </div>\n    <div data-attr=\"log\" class=\"convo\">\n      <div class=\"sentence\" data-attr=\"sentence\">\n\n        <span class=\"icon\" data-attr=\"icon\"></span><span data-attr=\"sender\" class=\"sender\">SENDER:</span>\n\n        <span data-attr=\"words\" class=\"words\">MSG</span>\n      </div>\n    </div>\n    <div class=\"keyboard\">\n      <div data-attr=\"info\" class=\"info\" style=\"display:none\">Info...</div>\n      <textarea data-attr=\"textarea\"></textarea>  </div></div>\n  <div>\n";

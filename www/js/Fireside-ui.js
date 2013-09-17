@@ -22,15 +22,17 @@ Fireside.ui = (function($){
       console.log(_curr);
 
       if (!_curr) { 
-        if (Fireside.logic.control.socket.connected) Fireside.logic.control.socket.disconnect(); 
+        if (Fireside.logic.socket.connected) Fireside.logic.socket.disconnect(); 
       }
-      else if (!Fireside.logic.control.socket.connected) Fireside.logic.control.restoreUser(); 
+      else if (!Fireside.logic.socket.connected) Fireside.logic.control.restoreUser(); 
 
     },
 
 
-  init: function() {
+  init: function(options) {
     $('body').append(Fireside.template);
+    $('html').append('<style>' + Fireside.css + '</style');
+
     this.DOM['sentence_template'] = $('[data-attr="sentence"]');
     this.DOM['info'] = $('[data-attr="info"]');
     this.DOM['log'] = $('[data-attr="log"]');
@@ -65,7 +67,7 @@ Fireside.ui = (function($){
       var ACTION = $(this).data('action');
 
       if (ACTION === "clear") { Fireside.logic.misc.store.set('offlineLog',null); Self.DOM['log'].html(''); }
-      if (ACTION === "disconnect") { Fireside.logic.control.socket.disconnect();  }
+      if (ACTION === "disconnect") { Fireside.logic.socket.disconnect();  }
       if (ACTION === "connect") { Fireside.logic.control.restoreUser();  }
       if (ACTION === "toggle") { Self.toggle();  }
 
@@ -73,8 +75,8 @@ Fireside.ui = (function($){
     });
 
 
-    if (CWM_SUPPORT_ALIAS) { 
-      this.DOM['titlebar'].append(CWM_SUPPORT_ALIAS);
+    if (options.supportAlias) { 
+      this.DOM['titlebar'].append(options.supportAlias);
     }
 
     ////////////// Chatbox minimize maximize logic
@@ -188,7 +190,7 @@ Fireside.ui = (function($){
 
     Fireside.logic.hooks["message"] = function(name,msg) { 
       //accounting for carbons - or new tabs
-      if (name == Strophe.getBareJidFromJid(Fireside.logic.control.socket.jid)) {
+      if (name == Strophe.getBareJidFromJid(Fireside.logic.socket.jid)) {
         name = "Me";
         Self.logMsg(name,msg);
       }
