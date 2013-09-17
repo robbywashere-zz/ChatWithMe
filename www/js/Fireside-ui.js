@@ -154,7 +154,7 @@ Fireside.ui = (function($){
     }
     $('[data-attr="textarea"]').keydown(function(e){
       if ((e.keyCode === 13) && (!e.originalEvent.shiftKey)) {
-
+        if (!Fireside.logic.socket.connected) { return false; }
         var msg = $(this).val();
         var $sentence = Self.logMsg('Me',msg);  
 
@@ -228,6 +228,8 @@ Fireside.ui = (function($){
 
   showConnecting: function() {
     Self.userStatus('connecting');
+    Self.DOM['info'].show().text('Connecting...');
+
     //  Self.DOM['info'].show().text('Connecting...');
     var savedHook = Fireside.logic.hooks['connected'];
     Fireside.logic.hooks['connected'] = function() { savedHook(); Self.DOM['info'].hide().text(''); }
