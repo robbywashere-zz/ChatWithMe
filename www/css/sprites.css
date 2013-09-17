@@ -1,36 +1,42 @@
 .icon.away {
-  background-image: url(css/sprites.png);
-  background-position: 0px -36px;
-  width: 32px;
-  height: 32px;
+  background-image: url(icon.png);
+  background-position: 0px -13px;
+  width: 16px;
+  height: 16px;
 }
 .icon.busy {
-  background-image: url(css/sprites.png);
-  background-position: 0px -68px;
-  width: 32px;
-  height: 32px;
+  background-image: url(icon.png);
+  background-position: 0px -29px;
+  width: 16px;
+  height: 16px;
 }
 .icon.error {
-  background-image: url(css/sprites.png);
+  background-image: url(icon.png);
   background-position: 0px 0px;
-  width: 14px;
-  height: 11px;
+  width: 16px;
+  height: 13px;
 }
 .icon.loading {
-  background-image: url(css/sprites.png);
-  background-position: 0px -11px;
-  width: 25px;
-  height: 25px;
+  background-image: url(icon.png);
+  background-position: 0px -45px;
+  width: 16px;
+  height: 16px;
 }
 .icon.offline {
-  background-image: url(css/sprites.png);
-  background-position: 0px -100px;
-  width: 32px;
-  height: 32px;
+  background-image: url(icon.png);
+  background-position: 0px -61px;
+  width: 16px;
+  height: 16px;
 }
 .icon.online {
-  background-image: url(css/sprites.png);
-  background-position: 0px -132px;
-  width: 32px;
-  height: 32px;
+  background-image: url(icon.png);
+  background-position: 0px -77px;
+  width: 16px;
+  height: 16px;
+}
+.icon.spritesheet {
+  background-image: url(icon.png);
+  background-position: 0px -93px;
+  width: 1px;
+  height: 16px;
 }

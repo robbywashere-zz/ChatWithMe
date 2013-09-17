@@ -9,12 +9,22 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
 
+        datauri: {
+            options: { classPrefix:'chat-box-title div.' },
+            default: {
+                src: 'www/css/icon.png',
+                dest: [
+                        "tmp/base64.css",
+                ]
+            }
+        },
+
         sprite: {
             all: {
                 src: 'www/images/*.png',
-                destImg: 'www/css/sprites.png',
+                destImg: 'www/css/icon.png',
                 destCSS: 'www/css/sprites.css',
-                imgPath: 'css/sprites.png',
+                imgPath: 'icon.png',
 
                 cssOpts: {
                     'cssClass': function(item) {
@@ -35,8 +45,8 @@ module.exports = function(grunt) {
         concat: {
             options: {
                 banner: '<%= banner %>',
-                stripBanners: true,
-                footer: ';Fireside.css = ' + JSON.stringify(grunt.file.read('www/css/out.min.css')) + ';Fireside.template = ' + JSON.stringify(grunt.file.read('www/partial.html')) + ';',
+                stripBanners: true
+                ,               footer: ';;Fireside.css = ' + JSON.stringify(grunt.file.read('www/css/main.min.css')) + ';Fireside.template = ' + JSON.stringify(grunt.file.read('www/partial.html')) + ';',
             },
             dist: {
                 src: [
@@ -98,13 +108,13 @@ module.exports = function(grunt) {
 
             combine: {
                 files: {
-                    'www/css/out.css': ['www/css/cbox-side-view.css', 'www/css/sprites.css']
+                    'www/css/main.css': ['tmp/base64.css','www/css/cbox-side-view.css', 'www/css/sprites.css']
                 },
                 nonull: true
             },
             minify: {
                 expand: true,
-                src: 'www/css/out.css',
+                src: 'www/css/main.css',
                 ext: '.min.css',
                 nonull: true
             }
@@ -115,6 +125,7 @@ module.exports = function(grunt) {
 
     // These plugins provide necessary tasks.
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-datauri');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -122,6 +133,18 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-spritesmith');
 
     // Default task.
-    grunt.registerTask('default', ['sprite', 'cssmin', 'concat', 'uglify']);
+
+    grunt.registerTask('default', ['sprite','datauri', 'cssmin', 'concat', 'uglify']);
+
+    grunt.registerTask('add', 'Experimental Task', function() {
+
+        var fs = require('fs');
+        var css_tmpl = ';Fireside.css = ' + JSON.stringify(grunt.file.read('www/css/main.min.css')) + ';';
+        css_tmpl += ';Fireside.template = ' + JSON.stringify(grunt.file.read('www/partial.html')) + ';';
+        fs.appendFile('www/js/Fireside.concat', css_tmpl, function() {
+            grunt.task.run('default');
+        });
+
+    });
 
 };

@@ -32,6 +32,7 @@
     ,  "grunt-contrib-cssmin" : "~0.6.1"
     , "grunt-html-validation": "~0.1.5"
     , "grunt-oversprite" : "~0.1.5"
+    , "grunt-datauri" : "~0.3.1"
     , "grunt-spritesmith": "*"
   }
 }
