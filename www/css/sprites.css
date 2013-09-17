@@ -10,6 +10,12 @@
   width: 16px;
   height: 16px;
 }
+.icon.connecting {
+  background-image: url(icon.png);
+  background-position: 0px -45px;
+  width: 16px;
+  height: 16px;
+}
 .icon.error {
   background-image: url(icon.png);
   background-position: 0px 0px;
@@ -18,25 +24,25 @@
 }
 .icon.loading {
   background-image: url(icon.png);
-  background-position: 0px -45px;
+  background-position: 0px -61px;
   width: 16px;
   height: 16px;
 }
 .icon.offline {
   background-image: url(icon.png);
-  background-position: 0px -61px;
+  background-position: 0px -77px;
   width: 16px;
   height: 16px;
 }
 .icon.online {
   background-image: url(icon.png);
-  background-position: 0px -77px;
+  background-position: 0px -93px;
   width: 16px;
   height: 16px;
 }
 .icon.spritesheet {
   background-image: url(icon.png);
-  background-position: 0px -93px;
+  background-position: 0px -109px;
   width: 1px;
   height: 16px;
 }

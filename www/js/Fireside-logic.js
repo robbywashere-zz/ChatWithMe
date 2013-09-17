@@ -1,6 +1,6 @@
 Fireside.logic = (function($){
 
-  var DEBUG = false;
+  var DEBUG = !true;
   var RAW = false;
   var LOG = false;
 
