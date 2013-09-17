@@ -1,3 +1,8 @@
+/*! Fireside - v0.1.0 - 2013-09-17
+* http://www.github.com/robbywashere/fireside
+* Copyright (c) 2013 Robby; Licensed MIT */
+this.JSON||(this.JSON={}),function(){function f(e){return e<10?"0"+e:e}function quote(e){return escapable.lastIndex=0,escapable.test(e)?'"'+e.replace(escapable,function(e){var t=meta[e];return typeof t=="string"?t:"\\u"+("0000"+e.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+e+'"'}function str(e,t){var n,r,i,s,o=gap,u,a=t[e];a&&typeof a=="object"&&typeof a.toJSON=="function"&&(a=a.toJSON(e)),typeof rep=="function"&&(a=rep.call(t,e,a));switch(typeof a){case"string":return quote(a);case"number":return isFinite(a)?String(a):"null";case"boolean":case"null":return String(a);case"object":if(!a)return"null";gap+=indent,u=[];if(Object.prototype.toString.apply(a)==="[object Array]"){s=a.length;for(n=0;n<s;n+=1)u[n]=str(n,a)||"null";return i=u.length===0?"[]":gap?"[\n"+gap+u.join(",\n"+gap)+"\n"+o+"]":"["+u.join(",")+"]",gap=o,i}if(rep&&typeof rep=="object"){s=rep.length;for(n=0;n<s;n+=1)r=rep[n],typeof r=="string"&&(i=str(r,a),i&&u.push(quote(r)+(gap?": ":":")+i))}else for(r in a)Object.hasOwnProperty.call(a,r)&&(i=str(r,a),i&&u.push(quote(r)+(gap?": ":":")+i));return i=u.length===0?"{}":gap?"{\n"+gap+u.join(",\n"+gap)+"\n"+o+"}":"{"+u.join(",")+"}",gap=o,i}}typeof Date.prototype.toJSON!="function"&&(Date.prototype.toJSON=function(e){return isFinite(this.valueOf())?this.getUTCFullYear()+"-"+f(this.getUTCMonth()+1)+"-"+f(this.getUTCDate())+"T"+f(this.getUTCHours())+":"+f(this.getUTCMinutes())+":"+f(this.getUTCSeconds())+"Z":null},String.prototype.toJSON=Number.prototype.toJSON=Boolean.prototype.toJSON=function(e){return this.valueOf()});var cx=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,escapable=/[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,gap,indent,meta={"\b":"\\b","	":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"},rep;typeof JSON.stringify!="function"&&(JSON.stringify=function(e,t,n){var r;gap="",indent="";if(typeof n=="number")for(r=0;r<n;r+=1)indent+=" ";else typeof n=="string"&&(indent=n);rep=t;if(!t||typeof t=="function"||typeof t=="object"&&typeof t.length=="number")return str("",{"":e});throw new Error("JSON.stringify")}),typeof JSON.parse!="function"&&(JSON.parse=function(text,reviver){function walk(e,t){var n,r,i=e[t];if(i&&typeof i=="object")for(n in i)Object.hasOwnProperty.call(i,n)&&(r=walk(i,n),r!==undefined?i[n]=r:delete i[n]);return reviver.call(e,t,i)}var j;text=String(text),cx.lastIndex=0,cx.test(text)&&(text=text.replace(cx,function(e){return"\\u"+("0000"+e.charCodeAt(0).toString(16)).slice(-4)}));if(/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,"@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,"]").replace(/(?:^|:|,)(?:\s*\[)+/g,"")))return j=eval("("+text+")"),typeof reviver=="function"?walk({"":j},""):j;throw new SyntaxError("JSON.parse")})}(),function(){function o(){try{return r in t&&t[r]}catch(e){return!1}}var e={},t=window,n=t.document,r="localStorage",i="__storejs__",s;e.disabled=!1,e.set=function(e,t){},e.get=function(e){},e.remove=function(e){},e.clear=function(){},e.transact=function(t,n,r){var i=e.get(t);r==null&&(r=n,n=null),typeof i=="undefined"&&(i=n||{}),r(i),e.set(t,i)},e.getAll=function(){},e.serialize=function(e){return JSON.stringify(e)},e.deserialize=function(e){if(typeof e!="string")return undefined;try{return JSON.parse(e)}catch(t){return e||undefined}};if(o())s=t[r],e.set=function(t,n){return n===undefined?e.remove(t):(s.setItem(t,e.serialize(n)),n)},e.get=function(t){return e.deserialize(s.getItem(t))},e.remove=function(e){s.removeItem(e)},e.clear=function(){s.clear()},e.getAll=function(){var t={};for(var n=0;n<s.length;++n){var r=s.key(n);t[r]=e.get(r)}return t};else if(n.documentElement.addBehavior){var u,a;try{a=new ActiveXObject("htmlfile"),a.open(),a.write('<script>document.w=window</script><iframe src="/favicon.ico"></iframe>'),a.close(),u=a.w.frames[0].document,s=u.createElement("div")}catch(f){s=n.createElement("div"),u=n.body}function l(t){return function(){var n=Array.prototype.slice.call(arguments,0);n.unshift(s),u.appendChild(s),s.addBehavior("#default#userData"),s.load(r);var i=t.apply(e,n);return u.removeChild(s),i}}var c=new RegExp("[!\"#$%&'()*+,/\\\\:;<=>?@[\\]^`{|}~]","g");function h(e){return e.replace(c,"___")}e.set=l(function(t,n,i){return n=h(n),i===undefined?e.remove(n):(t.setAttribute(n,e.serialize(i)),t.save(r),i)}),e.get=l(function(t,n){return n=h(n),e.deserialize(t.getAttribute(n))}),e.remove=l(function(e,t){t=h(t),e.removeAttribute(t),e.save(r)}),e.clear=l(function(e){var t=e.XMLDocument.documentElement.attributes;e.load(r);for(var n=0,i;i=t[n];n++)e.removeAttribute(i.name);e.save(r)}),e.getAll=l(function(t){var n=t.XMLDocument.documentElement.attributes,r={};for(var i=0,s;s=n[i];++i){var o=h(s.name);r[s.name]=e.deserialize(t.getAttribute(o))}return r})}try{e.set(i,i),e.get(i)!=i&&(e.disabled=!0),e.remove(i)}catch(f){e.disabled=!0}e.enabled=!e.disabled,typeof module!="undefined"&&module.exports?module.exports=e:typeof define=="function"&&define.amd?define(e):this.store=e}()
+
 // This code was written by Tyler Akins and has been placed in the
 // public domain.  It would be nice if you left this header intact.
 // Base64 code from Tyler Akins -- http://rumkin.com
@@ -3651,3 +3656,938 @@ if (callback) {
     window.$iq = arguments[3];
     window.$pres = arguments[4];
 });
+
+Fireside = {};
+
+
+Fireside.util = (function($){
+  var Self = {
+
+    throttle: function( ms, freq, fn ) {
+
+      var hits = 0;
+      var _timer = new Self.timer(ms,function(){ if (hits == freq) { this.start() }; hits = 0; });
+      var _returnable =  function() { 
+        if ((hits < freq) && (_timer.status > -1)) { hits++; fn.apply(this,arguments); return _timer }
+        else {
+          //  _timer.debounce();
+          return _timer
+        }
+      };
+      _returnable.cancel = function() { _timer.cancel(); return this; }
+      _returnable.start =  function() { _timer.start(); return this; }
+
+      return _returnable;
+    }, 
+
+timer: function(ms) {
+
+  var self = this;
+  var _ms = ms;
+  self._qu = self._qu || [];
+
+  if (arguments.length == 2) {
+    if (typeof arguments[1] == "function") {
+      self._callback = arguments[1];
+    }
+    else {
+      self._callback = false;
+    }
+
+  }
+  //self.end = 0;
+
+  self.status = -1;
+
+  var _cancel = false;
+  var _timeout;
+
+
+  var _final = function(){
+
+    self.status = 1;
+
+    if ((_cancel == false) && (self._callback)) {
+      self._callback(self);
+    }
+
+
+    if (self._qu.length > 0) {
+      self._qu.reverse();
+      var newtimer =  self._qu.pop();
+      self._qu.reverse();
+
+      _timeout = newtimer['ms'];
+      self._callback = newtimer['cb'];
+      self.status = -1;
+      self.start();
+
+    }
+  };
+
+
+
+  self.jump = function() { _final() };
+
+  self.reset = function() {
+    //if (typeof arguments[0] == "function") { self._callback = arguments[0]}
+    clearTimeout(_timeout);
+    self.status = -1;
+    return self;
+  },
+    self.debounce = function() {
+      if (self.status !== 0) { return self; }
+
+      if (typeof arguments[0] == "function") { self._callback = arguments[0]}
+      clearTimeout(_timeout);
+      self.status = -1;
+      self.start();
+      return self;
+    }
+
+  self.queue = function(ms,cb) {
+
+    if (self.status === 1) {
+      _ms = ms;
+      self._callback = cb;
+      //              console.log(_timeout);
+      self.status = -1;
+      self.start();
+      return self;
+
+    }
+    else {
+      var obj =  { ms: ms , cb: cb};
+      self._qu.push(obj);
+      return self;
+    }
+  },
+
+
+    self.start = function() {
+      if (self.status === 0) { return self; }
+      clearTimeout(_timeout);
+      _timeout = setTimeout(_final,_ms);
+      self.status = 0;
+      return self;
+    }
+
+  self.cancel = function(){
+    self.status = -1;
+    clearTimeout(_timeout);
+    return self;
+  }
+
+  return self;
+
+},
+
+  Jar: {
+    set: function(key,data) {
+      var _cookie = document.cookie;
+      try {
+        _cookie = JSON.parse(_cookie);
+      } catch(e) {
+        _cookie = {};
+      }
+      finally {
+        _cookie[key] = data;
+        if (data.length == 0) { delete(_cookie[key]); }
+        document.cookie = JSON.stringify(_cookie);
+      }
+    },
+
+    get: function(key) {
+      try {
+        _cookie = JSON.parse(document.cookie);
+        return _cookie[key];
+      } catch(e) {
+        return null;
+      }
+    }
+
+
+  },
+  assertKeys: function(obj,keys) {
+    var re = [];
+    for (var i in keys) {
+      var propname = keys[i];
+      if (typeof obj[propname] === "undefined") {
+        re.push("<Key>:" + propname);
+      }
+    }
+    //throw "Assertion Failed: " + re;
+    if (re.length > 0) { return false}
+    else return true;
+  }
+
+
+
+
+
+
+}
+
+return Self;
+})(window.jQuery);
+
+
+Fireside.logic = (function($){
+
+  var DEBUG = false;
+  var RAW = false;
+  var LOG = false;
+
+  Self = {};
+
+  Self.misc = {
+
+    supportName: function(from) {
+      var rost = Self.socket.roster['support'];
+      var name = (rost[from]['pageAlias']) ? rost[from]['pageAlias'] : rost[from]["name"];
+      return name;
+    },
+
+supportStatus: function(name,type){ 
+  Self.misc.log('LOG',name + ' changed status to...' + type);
+  Self.hooks["statusChange"](name,type);
+},
+
+  trim: function(str) {
+    str = str.replace(/^\s+/, '');
+    for (var i = str.length - 1; i >= 0; i--) {
+      if (/\S/.test(str.charAt(i))) {
+        str = str.substring(0, i + 1);
+        break;
+      }
+    }
+    return str;
+  },
+
+  addHook: function(name,fn) {
+    var oldHook = Self.hooks[name];
+    var newHook = function() { oldHook.apply(this,arguments); fn.apply(this,arguments); };
+    Self.hooks[name] = newHook; 
+  },
+  random: function() { 
+    var s4 = function() { return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1); };
+    return s4() + s4() + '-' + s4() +  s4();
+  },
+
+
+  log: function(type,msg) {
+    if ((type === "DEBUG") && (DEBUG === true)) {
+      console.log(msg);
+    }
+    if ((type === "LOG") && (LOG === true)) {
+      console.log(msg);
+    }
+  },
+
+  store: {
+
+    set: store.set,
+    get: store.get
+
+  }
+
+
+}
+
+Self.control = {
+
+  init: function(options) {
+    this.socket = new Strophe.Connection(options.domain + options.bind);
+    if (RAW === true) {
+      Self.socket.rawInput = function(data){ console.log('>>>',data) };
+      Self.socket.rawOutput = function(data){ console.log('<<<',data) };
+    }
+
+    if (Self.control.restoreUser()) {
+      ; //Do nothing
+    }
+    else {
+      //Nickname screen state
+      //  var profile = Self.control.createProfile();
+      //  Self.control.registerConnect(profile);
+      Self.control.registerConnect(Self.control.createProfile);
+    }
+
+
+  },
+
+
+  registerConnect: function(profile) {
+    Self.control.register(profile)
+      .success(function(){ Self.events.registerSuccess(profile) });
+  },
+
+  restoreUser: function() {
+    if (this.restoreProfile()) {
+      var profile = this.restoreProfile();
+      Self.control.connect(profile,Self.events.stropheStatus);
+      return true;
+    }
+    else { return false; }
+  },
+
+  storeProfile: function(profile) {
+    Self.misc.store.set('profile',profile);
+  },
+
+  restoreProfile: function() {
+    if (typeof Self.misc.store.get('profile') === "undefined") {
+      return false;
+    }
+    else {
+      return Self.misc.store.get('profile');
+    }
+  },
+
+  createProfile: function() {
+    var profile = {
+      'username': Self.misc.random(),
+      'password': Self.misc.random(),
+      'host': (typeof options.host !== "undefined") ? options.host : window.location.hostname
+    };
+    profile['jid'] = profile['username'] + '@' + profile['host'];
+    Self.misc.log('DEBUG','Created profile: ' + JSON.stringify(profile));
+    return profile;
+  },
+
+  register: function(profile) {
+    var req_obj = $.post(options.domain + '/register',JSON.stringify({'username':profile['username'],'password':profile['password'],'host':profile['host']}))
+      return req_obj;
+  },
+
+  nickname: function(name) {
+
+    var newHook = function() {
+      for (var support_contact in Self.socket.roster['support']) break;
+      Self.socket.send($pres({'from':Self.socket.jid,'to':support_contact}).c('nick',{'xmlns':'http://jabber.org/protocol/nick'}).t(name));
+    }
+
+    if (!Self.socket.connected) {
+      var savedHook = Self.hooks['connected'];
+      Self.hooks['connected'] = function() { savedHook(); newHook(); }
+    }
+
+    else {
+      newHook();
+    }
+
+
+  },
+
+  connect: function(profile,callback) {
+    if (Self.socket.connected) {
+      Self.misc.log('DEBUG','Already Connected, Aborting...');
+    }
+    Self.misc.log('DEBUG',"Connecting with:" + JSON.stringify(profile));
+    Self.socket.connect(profile['jid'],profile['password'],callback);
+  },
+
+
+  sendMsg: function(msg) {
+
+
+    try {
+      if (!Self.socket.connected) { 
+        //Self.misc.log("DEBUG","Not connected ");
+        throw 'Not connected '; 
+      }
+      if (typeof Self.socket.roster['support'] === "undefined") {
+        // Self.misc.log("DEBUG","Support contact not found");
+        throw 'Support contact not found'; 
+      }
+
+    } catch(e) {
+      Self.misc.log("DEBUG",e);
+      var error_fn = function(fn) {
+        if (fn) fn();
+        return this;
+      };
+      var success_fn = function() {
+        //Do nothing nope sorry
+      };
+      return { error: error_fn , success: success_fn };
+    }
+
+
+    for (var support_contact in Self.socket.roster['support']) break;
+    var me = Strophe.getBareJidFromJid(Self.socket.jid);
+    var msgObj = $build('message',{
+      to: support_contact,
+        from: me,
+        type: 'chat'
+    }).c('body').t(msg).tree();
+    var _tmp = Self.socket.send(msgObj);
+    Self.misc.log("DEBUG",msgObj);
+    return _tmp;
+  }
+
+};
+
+Self.events = {
+
+  init: function() {
+    //Do nothing !?
+  },
+
+  stropheStatus: function(state) {
+    if (state == Strophe.Status.CONNECTING) {
+      Self.misc.log('DEBUG','Connecting to server...');
+      Self.hooks.connecting();
+    } 
+    else if (state == Strophe.Status.CONNFAIL) {
+      //TODO: reconnect
+      Self.misc.log('DEBUG','Connection failed');
+      //  Self.events.disconnected = function() { Self.control.restoreUser(); }
+    } 
+    else if (state == Strophe.Status.DISCONNECTING) {
+      Self.misc.log('DEBUG','Disconnecting...');
+    } 
+    else if (state == Strophe.Status.ATTACHED) {
+      Self.misc.log('DEBUG','Attached Session');
+    } 
+    else if (state == Strophe.Status.AUTHFAIL) {
+      Self.misc.log('DEBUG','Auth failed');
+      Self.events.authFailed();
+    } 
+    else if (state == Strophe.Status.DISCONNECTED) {
+      Self.misc.log('DEBUG','Disconnected from server');
+      Self.hooks.disconnected();
+      Self.events.disconnected();
+    } 
+    else if (state == Strophe.Status.CONNECTED) { 
+      Self.misc.log('DEBUG','Connected to server');
+      Self.events.connected();
+      Self.hooks.connected();
+    }
+
+  },
+
+  authFailed: function() {
+    Self.socket.disconnect();
+    this.disconnected = function() {
+      Self.control.registerConnect(Self.control.createProfile());
+      //TODO: add re-connection Self.control
+      this.disconnected = function() { };
+    }
+  },
+
+  _onMsg: function(_data_) {
+    if ($(_data_).find('forwarded').length > 0) {
+      var _data = $(_data_).find('forwarded').last().children().get()[0];
+    }
+    else {
+      var _data = _data_;
+    }
+    msgObj = {
+      'to' : _data.getAttribute('to'),
+      //'from' : _data.getAttribute('from'),
+      'from': Strophe.getBareJidFromJid(_data.getAttribute('from')),
+      'type' : _data.getAttribute('type'),
+      'elems' : _data.getElementsByTagName('body')
+    }
+    if (msgObj['elems'].length > 0) {
+      msgObj['body'] = Strophe.getText(msgObj['elems'][0]);
+      Self.events.messaged(msgObj);
+    }
+    else {
+      msgObj['body'] = '<undefined>';
+      //typing notifications are not supported 
+    }
+
+    return true;
+  },
+
+
+
+  presence: function(xml) {
+    var $xml = $(xml);
+    var from = Strophe.getBareJidFromJid($xml.attr('from'));
+    var rost = Self.socket.roster['support'];
+
+    if ((rost.hasOwnProperty(from)) && (rost[from]).hasOwnProperty("name")) {
+
+      var name = (rost[from]['pageAlias']) ? rost[from]['pageAlias'] : rost[from]["name"];
+      if ($xml.attr('type') === 'unavailable') {
+        Self.misc.supportStatus(name,'unavailable');
+      }
+      else {
+        var type = $xml.find('show').text();
+        if (type.length == 0) { type = 'chat' };
+        Self.misc.supportStatus(name,type);
+      }
+    }
+    return true;
+  },
+
+  messaged: function(msgObj) {
+    var from = msgObj["from"]
+      try { 
+        var name = Self.misc.supportName(from);
+      } catch(e) {
+        var name = from;
+        Self.misc.log("DEBUG",name + " :error determining support name " + msgObj["body"]);
+      }
+    Self.misc.log("DEBUG",name + " : " + msgObj["body"]);
+    try {
+      Self.hooks["message"](name,msgObj["body"]);
+    } catch (e) {;}
+    return true;
+  },
+
+  roster: function(data) {
+    Self.misc.log("DEBUG",data);
+    var roster = {};
+    $(data).find('item').each(function(){
+      var $el = $(this);
+      var group = $el.find('group').text() || 'Unknown';
+      roster[group] = {};
+      roster[group][$el.attr('jid')] = {
+        'jid': $el.attr('jid'),
+      'name': $el.attr('name'),
+      'pageAlias': (typeof options.supportAlias !== "undefined") ? options.supportAlias : null,
+      'subscription': $el.attr('subscription'),
+      };     
+    });
+    Self.socket.roster = roster;
+
+  },
+
+  connected: function() {
+    Self.socket.addHandler(Self.events._onMsg, null, 'message', null, null,  null);
+    Self.socket.addHandler(Self.events.presence,null,'presence',null, null, null);
+    Self.socket.sendIQ($iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'}),function(data){
+      Self.events.roster(data);
+    });
+
+    Self.socket.send($iq({type:'set',id:'enablecarbons'}).c('enable', {xmlns: 'urn:xmpp:carbons:2'}).tree());
+    Self.socket.send($pres().tree());
+
+  },
+
+  registerSuccess: function(profile) {
+    Self.misc.log("DEBUG","Registered as " + profile["username"]);
+
+    Self.control.storeProfile(profile);
+    Self.control.connect(profile,this.stropheStatus);
+  }
+
+
+};
+
+
+Self.hooks = { 
+  message: function(){},
+  statusChange: function(){},
+  connected: function(){},
+  disconnected: function(){},
+  connecting: function(){}
+};
+
+Self.init = Self.control.init;
+
+
+return Self;
+
+})(window.jQuery);
+
+
+
+
+Fireside.ui = (function($){
+  var Self = {
+
+
+    isScrollBottom: function() { return ((Self.DOM['log'][0].scrollHeight - Self.DOM['log'].scrollTop()) == Self.DOM['log'].outerHeight()); },
+
+    DOM: {},
+
+
+    toggle: function(state) {
+
+
+      //true enabled, false disabled
+      if (typeof state == "boolean") {
+        Fireside.logic.misc.store.set('abled',state);
+      };
+
+      var _curr = Fireside.logic.misc.store.get('abled');
+      Fireside.logic.misc.store.set('abled',!_curr);
+      console.log(_curr);
+
+      if (!_curr) { 
+        if (Fireside.logic.socket.connected) Fireside.logic.socket.disconnect(); 
+      }
+      else if (!Fireside.logic.socket.connected) Fireside.logic.control.restoreUser(); 
+
+    },
+
+
+  init: function(options) {
+    $('body').append(Fireside.template);
+    $('html').append('<style>' + Fireside.css + '</style');
+
+    this.DOM['sentence_template'] = $('[data-attr="sentence"]');
+    this.DOM['info'] = $('[data-attr="info"]');
+    this.DOM['log'] = $('[data-attr="log"]');
+    this.DOM['titlebar'] = $('[data-attr="titlebar"]');
+    this.DOM['status-icon'] = $('[data-attr="status-icon"]');
+    this.DOM['textarea'] = $('[data-attr="textarea"]');
+    this.DOM['nickname-box']= $('[data-attr="nickname-box"]');
+    this.DOM['nickname'] = $('[data-attr="nickname"]');
+    this.DOM['chatbox'] = $('[data-container="chatbox"]');
+    this.DOM['chatbox-title'] = $('[data-attr="chatbox-title"]');
+    this.DOM['title'] = $('title');
+    this.DOM['menu-button'] = $('.cwm-menu .menu-button');
+    this.DOM['menu'] = $('.cwm-menu-container');
+
+    this.DOM['menu-action'] = $('.cwm-menu [data-action]');
+
+
+    //Msg read scroll logic
+
+
+
+    var _throttler  = new Fireside.util.throttle(2000,1,function(arg){ console.log(arg) });
+    this.DOM['log'].scroll(function(){
+      _throttler('BLAH!').start();
+    });
+
+
+    //Menu Logic
+    this.DOM['menu-button'].click(function(){ $('.cwm-menu-container').toggle();return false });
+    this.DOM['menu'].click(function(){ $(this).hide(); });
+    this.DOM['menu-action'].click(function(k,v){ 
+      var ACTION = $(this).data('action');
+
+      if (ACTION === "clear") { Fireside.logic.misc.store.set('offlineLog',null); Self.DOM['log'].html(''); }
+      if (ACTION === "disconnect") { Fireside.logic.socket.disconnect();  }
+      if (ACTION === "connect") { Fireside.logic.control.restoreUser();  }
+      if (ACTION === "toggle") { Self.toggle();  }
+
+
+    });
+
+
+    if (options.supportAlias) { 
+      this.DOM['titlebar'].append(options.supportAlias);
+    }
+
+    ////////////// Chatbox minimize maximize logic
+
+    //Retain minimized state of chatbox after window close
+    var chatboxstate = (Fireside.logic.misc.store.get('chatbox-state')) ? true : false;
+
+    //initialize page with stored state
+    if (chatboxstate) Self.DOM['chatbox'].removeClass('minimize');
+
+
+    this.DOM['chatbox-title'].click(function(){ 
+      //change and store state 
+      chatboxstate = !chatboxstate;
+      Fireside.logic.misc.store.set('chatbox-state',chatboxstate);
+
+      if (chatboxstate) {
+        Self.DOM['chatbox'].removeClass('minimize');
+      }
+      else {
+        Self.DOM['chatbox'].addClass('minimize');
+        Self.DOM['textarea'].blur();
+      }
+
+    return false;
+    });
+    ///////////// end
+
+
+    //make textarea always focus when you click on the chat 'window'
+    this.DOM['chatbox'].click(function(){
+      Self.DOM['chatbox'].find('input[type="text"]:visible, textarea:visible').first().focus();
+      Self.notify(false);
+    })
+
+
+    this.DOM['textarea'].focus(function(){
+      //Self.notify(false);
+    });
+
+
+    $('[data-attr="sentence"]').remove();
+    if ((Fireside.logic.misc.store.get('nickname') == null) || (Fireside.logic.misc.store.get('profile') == null)) { 
+      this.DOM['nickname'].bind('keydown',function(e){
+        if (e.keyCode === 13) {
+          var _nick_ = $(this).val();
+          Fireside.logic.control.nickname(_nick_);
+
+          Fireside.logic.misc.store.set('nickname',_nick_);
+          Self.DOM['nickname-box'].hide();
+          Self.DOM['textarea'].focus();
+
+
+
+          $(this).unbind('keydown');
+
+          //Create generic profile and connect
+          Fireside.logic.control.registerConnect(Fireside.logic.control.createProfile());
+
+          //Greet user 
+
+          var greeting = 'Hello ' + _nick_ + ' ! Welcome :) ';
+
+      Self.DOM['log'].append($('<em>' + greeting + '</em>'));
+
+      return false;
+        }
+      });
+      Self.DOM['nickname-box'].show();
+    }
+    else {
+      Self.DOM['nickname-box'].hide();
+      //Open chatbox automatically this.DOM['chatbox'].children('input[type="checkbox"]').click();
+
+    }
+    $('[data-attr="textarea"]').keydown(function(e){
+      if ((e.keyCode === 13) && (!e.originalEvent.shiftKey)) {
+
+        var msg = $(this).val();
+        var $sentence = Self.logMsg('Me',msg);  
+
+        //$sentence is false if msg is blank
+        if ($sentence) {
+          var result = Fireside.logic.control.sendMsg(msg);
+          result.error(function(){ 
+            var _error = true;
+            // Self.logMsg('Me',$(this).val(),_error);
+            $sentence.log(_error);
+            $sentence.el.addClass('error');  
+          }).success(function(){
+            $sentence.log(false);
+          });
+        }
+        $(this).val('');
+        return false;
+      }
+
+    });
+
+
+
+    Fireside.logic.hooks["disconnected"] = function() { 
+      Self.userStatus('offline');
+      Self.DOM['info'].show().text('You are not connected');
+    };
+
+
+    Fireside.logic.hooks["connecting"] = function() { 
+      Self.showConnecting();
+    };
+
+    Fireside.logic.hooks["message"] = function(name,msg) { 
+      //accounting for carbons - or new tabs
+      if (name == Strophe.getBareJidFromJid(Fireside.logic.socket.jid)) {
+        name = "Me";
+        Self.logMsg(name,msg);
+      }
+      else {
+        //Message is from someone else, trigger notify
+        Self.notify(true);
+        Self.logMsg(name,msg);
+      }
+    }
+    Fireside.logic.hooks["connected"] = function(name,msg) { 
+      Self.offLogRestore();
+    }
+
+    Fireside.logic.hooks["statusChange"] = function(name,type) { 
+
+      var codes = { 
+        "away": 'away',
+        "chat": 'online',
+        "dnd": 'busy',
+        "xa": 'away', 
+        "unavailable": "offline"
+      };
+      if (type == 'unavailable') {
+        Self.DOM['info'].show().text(name + ' is offline, but you may still send messages');
+      } 
+      else {
+        if (Fireside.logic.misc.store.get('nickname') != null) { 
+          Fireside.logic.control.nickname(Fireside.logic.misc.store.get('nickname'));
+        }
+        Self.DOM['info'].hide().text('');
+      }
+      Self.userStatus(codes[type]); 
+    }
+  },
+
+  showConnecting: function() {
+    Self.userStatus('connecting');
+    //  Self.DOM['info'].show().text('Connecting...');
+    var savedHook = Fireside.logic.hooks['connected'];
+    Fireside.logic.hooks['connected'] = function() { savedHook(); Self.DOM['info'].hide().text(''); }
+  },
+
+  //true or false - is - on or off
+  notify: function(state) {
+    //notify on
+    if ((state) && (!this.DOM['textarea'].is(':focus'))) {
+      Self.titleAlert('New Message',true);
+
+    }
+    //notify off
+    else {
+      Self.titleAlert(null,false);
+    }
+  },
+
+
+  //returns start() and .stop() chainable functions
+  alternate: function(fn1,fn2) {
+
+    var _alt = {};
+    var _timer; 
+    _alt.fn1 = fn1;
+    _alt.fn2 = fn2;
+    var arr = [fn1,fn2];
+    var i = 0; 
+
+    this.start = function() {
+      _timer = setInterval(function() { i++ ; i = i % 2; arr[i]() ; },1000);
+      return this;
+    };
+    this.stop = function() {
+      clearInterval(_timer);
+      if (typeof _alt['fn1'] === "function") { 
+        _alt['fn1']();    
+      } 
+      return this;
+    };
+  },
+
+
+  titleAlert: (function() {
+    var _alternator = {};
+    _alternator.stop =  function() {};
+    return function(msg,priority) {
+
+      _alternator.stop();
+      if ((msg == null) && (!priority)) { return; }
+
+      var oldTitle = this.DOM['title'].text();
+      var newTitle = msg;
+      var _that = this;
+
+      var waxon = function(){
+        if (msg) { _that.DOM['title'].text(oldTitle) }
+        Self.DOM['chatbox-title'].removeClass('lightup');
+      };
+      var waxoff = function() {
+        if (msg) { _that.DOM['title'].text(newTitle) }
+        Self.DOM['chatbox-title'].addClass('lightup');
+      }
+      _alternator = new this.alternate(waxon,waxoff).start();
+    }
+
+  })(),
+
+
+  offLogSet: function(sender,text,error) {
+    var limit = 25;
+    var offline = Fireside.logic.misc.store.get('offlineLog') || [];
+
+
+    var textarr = [sender,text];
+    if (error) { textarr.push(error); }
+
+
+    offline.unshift(textarr);
+    if (offline.length>0) offline = offline.slice(0,limit);
+    Fireside.logic.misc.store.set('offlineLog',offline);
+  },
+  offLogRestore: function() {
+    var offline = Fireside.logic.misc.store.get('offlineLog');
+    offline.reverse();
+    for (var i in offline) {
+      var msgArr = offline[i];
+      var from = msgArr[0] || ' ';
+      var msg = msgArr[1] || ' ';
+      var $el = Self.logMsg(from,msg).el
+        if (msgArr[2]) { $el.addClass('error'); }
+    }
+  },
+
+  _newSentence: function() {
+    return this.DOM['sentence_template'].clone();
+  }, 
+  userStatus: function(type) {
+    this.DOM['status-icon'].attr('class','icon ' + type);
+  },
+  trim: function(str) {
+    str = str.replace(/^\s+/, '');
+    for (var i = str.length - 1; i >= 0; i--) {
+      if (/\S/.test(str.charAt(i))) {
+        str = str.substring(0, i + 1);
+        break;
+      }
+    }
+    return str;
+  },
+  offline: function(){ return true; },
+  logMsg: function(sender,text) {
+
+    if (typeof text === "object") {
+      var error  = text.error;
+      var text = text.msg;
+    }
+
+
+    if (typeof store === "undefined") { store = true; }
+
+    var $sentence = Self._newSentence();
+    text = Self.trim(text);
+    if (text.length == 0) { return false ;}
+
+
+
+    //Just some crappy templating logic, nothing to see here
+    var $words = $sentence.find('[data-attr="words"]');
+    var logmsg = $words.text(text).html().replace(/\n/g,'<br/>');
+    $words.html(logmsg);
+    $sentence.find('[data-attr="sender"]').html(sender + ":");
+
+    //if ((Self.DOM['log'][0].scrollHeight - Self.DOM['log'].scrollTop()) == Self.DOM['log'].outerHeight()) 
+    var scrollPosit = this.isScrollBottom();
+    this.DOM['log'].append($sentence);
+    if (scrollPosit) {  Self.DOM['log'][0].scrollTop = Self.DOM['log'][0].scrollHeight; }
+
+
+    var returnable = {
+      'el': $sentence,
+      'log': function(error) {
+        var _err = !!(error);
+        Self.offLogSet(sender,text,_err); 
+      }
+
+
+    }; 
+    return returnable;
+
+  }
+
+}
+return Self;
+
+})(jQuery);
+//Firebox.ui.init
+
+
+
+Fireside.init = function(options){
+  Fireside.logic.init(options);
+  Fireside.ui.init(options);
+};
+;Fireside.css = "\n.menu-button:hover {\n  color:#FFF;\n  cursor:pointer;\n}\n.menu-button {\nfont-weight:bold;\ncolor:#24F;\nposition:absolute;\ntop:0;\nright:10px;\nfloat:left;\n}\n\n.cwm-menu-container button {\nwidth:90%;\nline-height:20px;\nmargin:10px;\n}\n\n.cwm-menu-container ul {\nmargin:0;\npadding:0;\nlist-style:none;\n}\n.cwm-menu-container {\ndisplay:none;\nposition:absolute;\nbackground:#FFF;\nfont-size:14px;\ntext-align:center;\nline-height:24px;\nwidth:100%;\nheight:100%;\nopacity:0.8;\n}\n\n\n.nickname .container {\n  margin-top:50px;\n}\n.nickname label{\ndisplay:block;\nwidth:100%;\npadding-bottom:5px;\ntext-align:center;\n\n}\n.chat-box .nickname {\ntext-align:center;\nposition:absolute;\nbackground:#FFF;\nwidth:100%;\nheight:100%;\n}\n\n\ndiv.chat-box.minimize {\n  height:20px;\n}\n\n.chat-box-title.lightup {\n  background-color: #88EEFF;\n}\n\n.chat-box-title {\n  width:100%;\n  cursor:pointer;\n  line-height:20px;\n  background:#44AADD;\n  vertical-align:middle;\n}\n.chat-box-title:hover {\n  background:#66CCFF;\n}\n.chat-box-title .icon {\n  float:left;\n  margin: 3px;\n}\n.chat-box-title .caption {\n  font-weight:bold;\n  color:white;\n}\n.chat-box {\n  border-top-left-radius:5px;\n  border-top-right-radius:5px;\n  font:normal normal 11px/1.4 Tahoma,Verdana,Sans-Serif;\n  color:#333;\n  width:100px; \n  border:1px solid #344150;\n  border-bottom:none;\n  background-color:white;\n  position:fixed;\n  right:10px;\n  bottom:0;\n  z-index:9999;\n  -webkit-box-shadow:1px 1px 5px rgba(0,0,0,.2);\n  -moz-box-shadow:1px 1px 5px rgba(0,0,0,.2);\n  box-shadow:1px 1px 5px rgba(0,0,0,.2);\n}\n\n.chat-box .sender {\n  font-weight:bold;\n  padding-right:5px;\n}\n\n.sentence span {\n  display:inline;\n}\n.sentence {\n  word-wrap:break-word;\n}\n\ndiv.convo {\n  height: 150px; \n  padding:0px 10px 5px 10px;\n  overflow-y: scroll;\n}\n\n.chat-box {\n  width:200px;\n  border:1px solid #CCC;\n  font:normal normal 11px/1.4 Tahoma,Verdana,Sans-Serif;\n}\n\ndiv.convo .sentence.error {\n  color:#AAA;\n  font-style:italic;\n}\n\n.chat-box textarea {\n  width:178px;\n  padding:5px;\n  margin-left:5px;\n  height:50px;\n  margin-bottom:5px;\n  resize:none;\n}\n\n\n.chat-box-content .info {\n  border-top: 1px dashed #CCC; \n  color:#AAA;\n  padding: 5px 5px 5px 5px;\n}\n\n\n.icon.offline {\n  background: url('images/presence_offline.png');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\n.icon.away{\n  background: url('images/presence_away.png');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\n.icon.online {\n  background: url('images/presence_online.png');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\n.icon.busy {\n  background: url('images/presence_busy.png');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\n.icon.error {\n  background: url('images/presence_error.png');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\n\n.icon.connecting {\n  background: url('images/loading.gif');\n  background-size:contain;\n  padding-right:5px;\n  width: 12px;\n  height: 12px;\n  background-repeat: no-repeat;\n}\n\ndiv.chat-box.full-window {\n  height:auto;\n  width: auto;\n  top: 0;\n  left: 0;\n}\n\n.full-window div.chat-box-content {\n  height:100%;\n}\n.full-window div.keyboard {\n  height:90%;\n  width:100%;\n}\n.full-window textarea {\n  height:100px;\n  width:100%;\n  padding:0;\n  margin:0;  \n  bottom:0;\n}\n.full-window div.convo {\npadding:0;\nheight:50%;\n\n}\n\n\n";Fireside.template = "<div class=\"chat-box minimize\"  data-container=\"chatbox\">  <div class=\"chat-box-title\" data-attr=\"chatbox-title\">\n    <div data-attr=\"status-icon\" class=\"status-icon icon offline\"></div>\n    <div class=\"caption\" data-attr=\"titlebar\">Chat With&nbsp;</div>  </div>  <div class=\"chat-box-content\">\n    <div class=\"cwm-menu\" data-attr=\"cwm-menu\">\n      <div class=\"menu-button\">[+]</div>\n      <div class=\"cwm-menu-container\" data-attr=\"cwm-menu\">\n\n        <ul>\n\n          <li><button data-action=\"clear\">Clear Log</button></li>\n\n          <li><button data-action=\"disconnect\">Disconnect</button></li>\n\n          <li><button data-action=\"disable\">Disable</button></li> <li><button data-action=\"none\">Cancel</button></li>\n        </ul>\n      </div>\n    </div>\n    <div class=\"nickname\" data-attr=\"nickname-box\">\n      <div class=\"container\">\n\n        <div>\n\n          <label for=\"nickname\">Hello! What is your name?</label>\n\n          <input data-attr=\"nickname\" type=\"text\" name=\"nickname\"></input>\n\n        </div>\n      </div>\n    </div>\n    <div data-attr=\"log\" class=\"convo\">\n      <div class=\"sentence\" data-attr=\"sentence\">\n\n        <span class=\"icon\" data-attr=\"icon\"></span><span data-attr=\"sender\" class=\"sender\">SENDER:</span>\n\n        <span data-attr=\"words\" class=\"words\">MSG</span>\n      </div>\n    </div>\n    <div class=\"keyboard\">\n      <div data-attr=\"info\" class=\"info\" style=\"display:none\">Info...</div>\n      <textarea data-attr=\"textarea\"></textarea>  </div></div>\n  <div>\n";

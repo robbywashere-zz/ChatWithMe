@@ -1,3 +1,6 @@
+/*! PROJECT_NAME - v0.1.0 - 2013-09-16
+* http://PROJECT_WEBSITE/
+* Copyright (c) 2013 YOUR_NAME; Licensed MIT */
 
 (function($){
 
@@ -17,11 +20,11 @@
 
     //true enabled, false disabled
     if (typeof state == "boolean") {
-      misc.store.set('abled',state);
+      Fireside.logic.misc.store.set('abled',state);
     };
 
-    var _curr = misc.store.get('abled');
-    misc.store.set('abled',!_curr);
+    var _curr = Fireside.logic.misc.store.get('abled');
+    Fireside.logic.misc.store.set('abled',!_curr);
     console.log(_curr);
 
     if (!_curr) { 
@@ -66,7 +69,7 @@
           this.DOM['menu-action'].click(function(k,v){ 
             var ACTION = $(this).data('action');
 
-            if (ACTION === "clear") { misc.store.set('offlineLog',null); Self.DOM['log'].html(''); }
+            if (ACTION === "clear") { Fireside.logic.misc.store.set('offlineLog',null); Self.DOM['log'].html(''); }
             if (ACTION === "disconnect") { control.socket.disconnect();  }
             if (ACTION === "connect") { control.restoreUser();  }
             if (ACTION === "toggle") { Self.toggle();  }
@@ -82,7 +85,7 @@
           ////////////// Chatbox minimize maximize logic
 
           //Retain minimized state of chatbox after window close
-          var chatboxstate = (misc.store.get('chatbox-state')) ? true : false;
+          var chatboxstate = (Fireside.logic.misc.store.get('chatbox-state')) ? true : false;
 
           //initialize page with stored state
           if (chatboxstate) Self.DOM['chatbox'].removeClass('minimize');
@@ -91,7 +94,7 @@
           this.DOM['chatbox-title'].click(function(){ 
             //change and store state 
             chatboxstate = !chatboxstate;
-            misc.store.set('chatbox-state',chatboxstate);
+            Fireside.logic.misc.store.set('chatbox-state',chatboxstate);
 
             if (chatboxstate) {
               Self.DOM['chatbox'].removeClass('minimize');
@@ -119,13 +122,13 @@
 
 
           $('[data-attr="sentence"]').remove();
-          if ((misc.store.get('nickname') == null) || (misc.store.get('profile') == null)) { 
+          if ((Fireside.logic.misc.store.get('nickname') == null) || (Fireside.logic.misc.store.get('profile') == null)) { 
             this.DOM['nickname'].bind('keydown',function(e){
               if (e.keyCode === 13) {
                 var _nick_ = $(this).val();
                 control.nickname(_nick_);
 
-                misc.store.set('nickname',_nick_);
+                Fireside.logic.misc.store.set('nickname',_nick_);
                 cBox.DOM['nickname-box'].hide();
                 cBox.DOM['textarea'].focus();
 
@@ -178,17 +181,17 @@
 
 
 
-          hooks["disconnected"] = function() { 
+          Fireside.logic.hooks["disconnected"] = function() { 
             cBox.userStatus('offline');
             cBox.DOM['info'].show().text('You are not connected');
           };
 
 
-          hooks["connecting"] = function() { 
+          Fireside.logic.hooks["connecting"] = function() { 
             cBox.showConnecting();
           };
 
-          hooks["message"] = function(name,msg) { 
+          Fireside.logic.hooks["message"] = function(name,msg) { 
             //accounting for carbons - or new tabs
             if (name == Strophe.getBareJidFromJid(control.socket.jid)) {
               name = "Me";
@@ -200,11 +203,11 @@
               cBox.logMsg(name,msg);
             }
           }
-          hooks["connected"] = function(name,msg) { 
+          Fireside.logic.hooks["connected"] = function(name,msg) { 
             cBox.offLogRestore();
           }
 
-          hooks["statusChange"] = function(name,type) { 
+          Fireside.logic.hooks["statusChange"] = function(name,type) { 
 
             var codes = { 
               "away": 'away',
@@ -217,8 +220,8 @@
               cBox.DOM['info'].show().text(name + ' is offline, but you may still send messages');
             } 
             else {
-              if (misc.store.get('nickname') != null) { 
-                control.nickname(misc.store.get('nickname'));
+              if (Fireside.logic.misc.store.get('nickname') != null) { 
+                control.nickname(Fireside.logic.misc.store.get('nickname'));
               }
               cBox.DOM['info'].hide().text('');
             }
@@ -229,8 +232,8 @@
   showConnecting: function() {
                     cBox.userStatus('connecting');
                     //  cBox.DOM['info'].show().text('Connecting...');
-                    var savedHook = hooks['connected'];
-                    hooks['connected'] = function() { savedHook(); cBox.DOM['info'].hide().text(''); }
+                    var savedHook = Fireside.logic.hooks['connected'];
+                    Fireside.logic.hooks['connected'] = function() { savedHook(); cBox.DOM['info'].hide().text(''); }
                   },
 
   //true or false - is - on or off
@@ -299,7 +302,7 @@
 
   offLogSet: function(sender,text,error) {
                var limit = 25;
-               var offline = misc.store.get('offlineLog') || [];
+               var offline = Fireside.logic.misc.store.get('offlineLog') || [];
 
 
                var textarr = [sender,text];
@@ -308,10 +311,10 @@
 
                offline.unshift(textarr);
                if (offline.length>0) offline = offline.slice(0,limit);
-               misc.store.set('offlineLog',offline);
+               Fireside.logic.misc.store.set('offlineLog',offline);
              },
   offLogRestore: function() {
-                   var offline = misc.store.get('offlineLog');
+                   var offline = Fireside.logic.misc.store.get('offlineLog');
                    offline.reverse();
                    for (var i in offline) {
                      var msgArr = offline[i];

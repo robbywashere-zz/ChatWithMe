@@ -1,0 +1,36 @@
+.icon-error {
+  background-image: url(../images/spritesheet.png);
+  background-position: 0px 0px;
+  width: 14px;
+  height: 11px;
+}
+.icon-presence_away {
+  background-image: url(../images/spritesheet.png);
+  background-position: 0px -11px;
+  width: 32px;
+  height: 32px;
+}
+.icon-presence_busy {
+  background-image: url(../images/spritesheet.png);
+  background-position: 0px -43px;
+  width: 32px;
+  height: 32px;
+}
+.icon-presence_offline {
+  background-image: url(../images/spritesheet.png);
+  background-position: 0px -75px;
+  width: 32px;
+  height: 32px;
+}
+.icon-presence_online {
+  background-image: url(../images/spritesheet.png);
+  background-position: 0px -107px;
+  width: 32px;
+  height: 32px;
+}
+.icon-spritesheet {
+  background-image: url(../images/spritesheet.png);
+  background-position: 0px -139px;
+  width: 32px;
+  height: 1112px;
+}
