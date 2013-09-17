@@ -74,8 +74,10 @@ div.chat-box.minimize {
   background:#66CCFF;
 }
 .chat-box-title .icon {
+
+margin-top: -7px;
+margin-left: -15px;
   float:left;
-  margin: 3px;
 }
 .chat-box-title .caption {
   font-weight:bold;
@@ -142,62 +144,6 @@ div.convo .sentence.error {
   border-top: 1px dashed #CCC; 
   color:#AAA;
   padding: 5px 5px 5px 5px;
-}
-
-
-.icon.offline {
-  background: url('images/presence_offline.png');
-  background-size:contain;
-  padding-right:5px;
-  width: 12px;
-  height: 12px;
-  background-repeat: no-repeat;
-}
-
-.icon.away{
-  background: url('images/presence_away.png');
-  background-size:contain;
-  padding-right:5px;
-  width: 12px;
-  height: 12px;
-  background-repeat: no-repeat;
-}
-
-.icon.online {
-  background: url('images/presence_online.png');
-  background-size:contain;
-  padding-right:5px;
-  width: 12px;
-  height: 12px;
-  background-repeat: no-repeat;
-}
-
-.icon.busy {
-  background: url('images/presence_busy.png');
-  background-size:contain;
-  padding-right:5px;
-  width: 12px;
-  height: 12px;
-  background-repeat: no-repeat;
-}
-
-.icon.error {
-  background: url('images/presence_error.png');
-  background-size:contain;
-  padding-right:5px;
-  width: 12px;
-  height: 12px;
-  background-repeat: no-repeat;
-}
-
-
-.icon.connecting {
-  background: url('images/loading.gif');
-  background-size:contain;
-  padding-right:5px;
-  width: 12px;
-  height: 12px;
-  background-repeat: no-repeat;
 }
 
 div.chat-box.full-window {
