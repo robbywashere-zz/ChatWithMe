@@ -4251,11 +4251,11 @@ Fireside.ui = (function($){
     //Msg read scroll logic
 
 
-
+/*
     var _throttler  = new Fireside.util.throttle(2000,1,function(arg){ console.log(arg) });
     this.DOM['log'].scroll(function(){
       _throttler('BLAH!').start();
-    });
+    }); */
 
 
     //Menu Logic
