@@ -4,35 +4,35 @@
   cursor:pointer;
 }
 .menu-button {
-font-weight:bold;
-color:#24F;
-position:absolute;
-top:0;
-right:10px;
-float:left;
+  font-weight:bold;
+  color:#24F;
+  position:absolute;
+  top:0;
+  right:10px;
+  float:left;
 }
 
 .cwm-menu-container button {
-width:90%;
-line-height:20px;
-margin:10px;
+  width:90%;
+  line-height:20px;
+  margin:10px;
 }
 
 .cwm-menu-container ul {
-margin:0;
-padding:0;
-list-style:none;
+  margin:0;
+  padding:0;
+  list-style:none;
 }
 .cwm-menu-container {
-display:none;
-position:absolute;
-background:#FFF;
-font-size:14px;
-text-align:center;
-line-height:24px;
-width:100%;
-height:100%;
-opacity:0.8;
+  display:none;
+  position:absolute;
+  background:#FFF;
+  font-size:14px;
+  text-align:center;
+  line-height:24px;
+  width:100%;
+  height:100%;
+  opacity:0.8;
 }
 
 
@@ -40,18 +40,18 @@ opacity:0.8;
   margin-top:50px;
 }
 .nickname label{
-display:block;
-width:100%;
-padding-bottom:5px;
-text-align:center;
+  display:block;
+  width:100%;
+  padding-bottom:5px;
+  text-align:center;
 
 }
 .chat-box .nickname {
-text-align:center;
-position:absolute;
-background:#FFF;
-width:100%;
-height:100%;
+  text-align:center;
+  position:absolute;
+  background:#FFF;
+  width:100%;
+  height:100%;
 }
 
 
@@ -74,9 +74,13 @@ div.chat-box.minimize {
   background:#66CCFF;
 }
 .chat-box-title .icon {
+
+  margin: 2px;
+  margin-top: 1px;
   float:left;
 }
 .chat-box-title .caption {
+  margin-left:20px;
   font-weight:bold;
   color:white;
 }
@@ -165,9 +169,28 @@ div.chat-box.full-window {
   bottom:0;
 }
 .full-window div.convo {
-padding:0;
-height:50%;
+  padding:0;
+  height:50%;
 
 }
 
+.chat-box.fullscreen .chat-box-content {
+  -webkit-box-shadow:1px 1px 5px rgba(0,0,0,.2);
+  -moz-box-shadow:1px 1px 5px rgba(0,0,0,.2);
+  box-shadow:1px 1px 5px rgba(0,0,0,.2);
+
+}
+.chat-box.fullscreen {
+width:490px; 
+position:relative; 
+margin:auto; 
+}
+.chat-box.fullscreen textarea{
+  padding:5px;
+  width:468px;
+}
+
+.chat-box.fullscreen .cwm-menu-container, .chat-box.fullscreen .nickname {
+height: 250px;
+}
 

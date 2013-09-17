@@ -98,8 +98,8 @@ module.exports = function(grunt) {
         },
         watch: {
             gruntfile: {
-                files: '<%= jshint.gruntfile.src %>',
-                tasks: ['jshint:gruntfile']
+                files: 'www/**',
+                tasks: ['default']
             }
         },
 
