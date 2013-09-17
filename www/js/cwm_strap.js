@@ -1,16 +1,9 @@
-if (window.location.host === "localhost:8080") {
-  CWM_SUPPORT_ALIAS='Robby';
-  CWM_DOMAIN = 'http://localhost:8080';
-  CWM_BIND = CWM_DOMAIN + '/xmpp-httpbind';
-  CWM_HOST = 'localhost';
-}
 
 (function($){
 
-$.ajax({cache:false,async:true})
+$.ajax({cache:false,async:true});
 
-  var fnStack = function(){
-    $('.chat-box').show();
+  window.fnStack = function(){
   };
 
   window.depsReady = function(fn) {
@@ -21,11 +14,12 @@ $.ajax({cache:false,async:true})
 
 
   var scripts = ['/js/vendor/strophe.js','/js/vendor/store+json2.min.js','/js/cwm-logic.js','/js/cwm-ui.js','/js/magic.js','/js/util.js'];
-  var _deps = 0;
+  
+  var _deps = 1;
 
   CWM_DEPEND = function() {
     _deps++;
-    if (_deps == scripts.length) {
+    if (_deps >= scripts.length) {
       fnStack();
     }
   };
@@ -41,7 +35,8 @@ $.ajax({cache:false,async:true})
     $.each(scripts,function(i,val){
       //var tag = '<script type="text/javascript" src="' + CWM_DOMAIN + val + '"></script>';
      // scriptsArr.push(tag);
-      $.getScript(CWM_DOMAIN + val);
+      console.log('loading', val);
+      $.getScript(CWM_DOMAIN + val,function(x,i){ console.log('loaded',val); });
     });
    // var scriptsFull = scriptsArr.join("\n");
     //$('html').append(scriptsFull);

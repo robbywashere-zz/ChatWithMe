@@ -1,35 +1,23 @@
-//Support is used as in indicator on the roster to mean me :)
-//var profile {
-//host:
-//username:
-//password:
-//token: (optional)
-//}
+Fireside.logic = (function($){
 
-//TODO: come up with better nickname support for both Support and User
+  var DEBUG = !true;
+  var RAW = false;
+  var LOG = false;
 
-(function($){
+  Self = {};
 
+  Self.misc = {
 
+    supportName: function(from) {
+      var rost = Self.control.socket.roster['support'];
+      var name = (rost[from]['pageAlias']) ? rost[from]['pageAlias'] : rost[from]["name"];
+      return name;
+    },
 
-
-var DEBUG = !true;
-var RAW = false;
-var LOG = false;
-
-
-window.misc = {
-
-  supportName: function(from) {
-    var rost = control.socket.roster['support'];
-    var name = (rost[from]['pageAlias']) ? rost[from]['pageAlias'] : rost[from]["name"];
-    return name;
-  },
-
-  supportStatus: function(name,type){ 
-    misc.log('LOG',name + ' changed status to...' + type);
-    hooks["statusChange"](name,type);
-  },
+supportStatus: function(name,type){ 
+  Self.misc.log('LOG',name + ' changed status to...' + type);
+  hooks["statusChange"](name,type);
+},
 
   trim: function(str) {
     str = str.replace(/^\s+/, '');
@@ -72,53 +60,65 @@ window.misc = {
 
 }
 
-window.control = {
+Self.control = {
 
   init: function() {
-    this.socket = new Strophe.Connection(CWM_BIND);
+    Self.socket = new Strophe.Connection(CWM_BIND);
     if (RAW === true) {
-      this.socket.rawInput = function(data){ console.log('>>>',data) };
-      this.socket.rawOutput = function(data){ console.log('<<<',data) };
+      Self.socket.rawInput = function(data){ console.log('>>>',data) };
+      Self.socket.rawOutput = function(data){ console.log('<<<',data) };
     }
+
+    if (Self.control.restoreUser()) {
+      ; //Do nothing
+    }
+    else {
+      //Nickname screen state
+      //  var profile = Self.control.createProfile();
+      //  Self.control.registerConnect(profile);
+      Self.control.registerConnect(Self.control.createProfile);
+    }
+
+
   },
 
 
   registerConnect: function(profile) {
-    control.register(profile)
-      .success(function(){ events.registerSuccess(profile) });
-    //TODO: .error(function(data) { console.log(profile); events.registerFail(data) });
+    Self.control.register(profile)
+      .success(function(){ Self.events.registerSuccess(profile) });
+    //TODO: .error(function(data) { console.log(profile); Self.events.registerFail(data) });
   },
 
   restoreUser: function() {
     if (this.restoreProfile()) {
       var profile = this.restoreProfile();
-      control.connect(profile,events.stropheStatus);
+      Self.control.connect(profile,Self.events.stropheStatus);
       return true;
     }
     else { return false; }
   },
 
   storeProfile: function(profile) {
-    misc.store.set('profile',profile);
+    Self.misc.store.set('profile',profile);
   },
 
   restoreProfile: function() {
-    if (typeof misc.store.get('profile') === "undefined") {
+    if (typeof Self.misc.store.get('profile') === "undefined") {
       return false;
     }
     else {
-      return misc.store.get('profile');
+      return Self.misc.store.get('profile');
     }
   },
 
   createProfile: function() {
     var profile = {
-      'username': misc.random(),
-      'password': misc.random(),
+      'username': Self.misc.random(),
+      'password': Self.misc.random(),
       'host': (typeof CWM_HOST !== "undefined") ? CWM_HOST : window.location.hostname
     };
     profile['jid'] = profile['username'] + '@' + profile['host'];
-    misc.log('DEBUG','Created profile: ' + JSON.stringify(profile));
+    Self.misc.log('DEBUG','Created profile: ' + JSON.stringify(profile));
     return profile;
   },
 
@@ -130,11 +130,11 @@ window.control = {
   nickname: function(name) {
 
     var newHook = function() {
-      for (var support_contact in control.socket.roster['support']) break;
-      control.socket.send($pres({'from':control.socket.jid,'to':support_contact}).c('nick',{'xmlns':'http://jabber.org/protocol/nick'}).t(name));
+      for (var support_contact in Self.control.socket.roster['support']) break;
+      Self.control.socket.send($pres({'from':Self.control.socket.jid,'to':support_contact}).c('nick',{'xmlns':'http://jabber.org/protocol/nick'}).t(name));
     }
 
-    if (!control.socket.connected) {
+    if (!Self.control.socket.connected) {
       var savedHook = hooks['connected'];
       hooks['connected'] = function() { savedHook(); newHook(); }
     }
@@ -147,11 +147,11 @@ window.control = {
   },
 
   connect: function(profile,callback) {
-    if (this.socket.connected) {
-      misc.log('DEBUG','Already Connected, Aborting...');
+    if (Self.socket.connected) {
+      Self.misc.log('DEBUG','Already Connected, Aborting...');
     }
-    misc.log('DEBUG',"Connecting with:" + JSON.stringify(profile));
-    this.socket.connect(profile['jid'],profile['password'],callback);
+    Self.misc.log('DEBUG',"Connecting with:" + JSON.stringify(profile));
+    Self.socket.connect(profile['jid'],profile['password'],callback);
   },
 
 
@@ -159,17 +159,17 @@ window.control = {
 
 
     try {
-      if (!control.socket.connected) { 
-        //misc.log("DEBUG","Not connected ");
+      if (!Self.control.socket.connected) { 
+        //Self.misc.log("DEBUG","Not connected ");
         throw 'Not connected '; 
       }
-      if (typeof control.socket.roster['support'] === "undefined") {
-       // misc.log("DEBUG","Support contact not found");
+      if (typeof Self.control.socket.roster['support'] === "undefined") {
+        // Self.misc.log("DEBUG","Support contact not found");
         throw 'Support contact not found'; 
       }
 
     } catch(e) {
-      misc.log("DEBUG",e);
+      Self.misc.log("DEBUG",e);
       var error_fn = function(fn) {
         if (fn) fn();
         return this;
@@ -181,85 +181,64 @@ window.control = {
     }
 
 
-    for (var support_contact in control.socket.roster['support']) break;
-    var me = Strophe.getBareJidFromJid(this.socket.jid);
+    for (var support_contact in Self.control.socket.roster['support']) break;
+    var me = Strophe.getBareJidFromJid(Self.socket.jid);
     var msgObj = $build('message',{
       to: support_contact,
         from: me,
         type: 'chat'
     }).c('body').t(msg).tree();
-    var _tmp = this.socket.send(msgObj);
-    misc.log("DEBUG",msgObj);
+    var _tmp = Self.socket.send(msgObj);
+    Self.misc.log("DEBUG",msgObj);
     return _tmp;
   }
 
 };
 
-window.events = {
+Self.events = {
 
   init: function() {
-
-  },
-
-
-  load: function() {
-    control.init();
-    //Already has nickname
-
-
-
-    if (control.restoreUser()) {
-      ;
-    }
-    else {
-      //Nickname screen state
-      //  var profile = control.createProfile();
-      //  control.registerConnect(profile);
-
-       control.registerConnect(control.createProfile);
-
-    }
-
+    //Do nothing !?
   },
 
   stropheStatus: function(state) {
     if (state == Strophe.Status.CONNECTING) {
-      misc.log('DEBUG','Connecting to server...');
+      Self.misc.log('DEBUG','Connecting to server...');
       hooks.connecting();
     } 
     else if (state == Strophe.Status.CONNFAIL) {
       //TODO: reconnect
-      misc.log('DEBUG','Connection failed');
-      //  events.disconnected = function() { control.restoreUser(); }
+      Self.misc.log('DEBUG','Connection failed');
+      //  Self.events.disconnected = function() { Self.control.restoreUser(); }
     } 
     else if (state == Strophe.Status.DISCONNECTING) {
-      misc.log('DEBUG','Disconnecting...');
+      Self.misc.log('DEBUG','Disconnecting...');
     } 
     else if (state == Strophe.Status.ATTACHED) {
-      misc.log('DEBUG','Attached Session');
+      Self.misc.log('DEBUG','Attached Session');
     } 
     else if (state == Strophe.Status.AUTHFAIL) {
-      misc.log('DEBUG','Auth failed');
-      events.authFailed();
+      Self.misc.log('DEBUG','Auth failed');
+      Self.events.authFailed();
     } 
     else if (state == Strophe.Status.DISCONNECTED) {
-      misc.log('DEBUG','Disconnected from server');
+      Self.misc.log('DEBUG','Disconnected from server');
       hooks.disconnected();
-      events.disconnected();
+      Self.events.disconnected();
     } 
     else if (state == Strophe.Status.CONNECTED) { 
-      misc.log('DEBUG','Connected to server');
-      events.connected();
+      Self.misc.log('DEBUG','Connected to server');
+      Self.events.connected();
       hooks.connected();
     }
 
   },
 
   authFailed: function() {
-    control.socket.disconnect();
+    Self.control.socket.disconnect();
     this.disconnected = function() {
-      control.registerConnect(control.createProfile());
-      //TODO: add re-connection control
+      Self.control.registerConnect(Self.control.createProfile());
+      //TODO: add re-connection Self.control
       this.disconnected = function() { };
     }
   },
@@ -280,7 +259,7 @@ window.events = {
     }
     if (msgObj['elems'].length > 0) {
       msgObj['body'] = Strophe.getText(msgObj['elems'][0]);
-      events.messaged(msgObj);
+      Self.events.messaged(msgObj);
     }
     else {
       msgObj['body'] = '<undefined>';
@@ -295,18 +274,18 @@ window.events = {
   presence: function(xml) {
     var $xml = $(xml);
     var from = Strophe.getBareJidFromJid($xml.attr('from'));
-    var rost = control.socket.roster['support'];
+    var rost = Self.control.socket.roster['support'];
 
     if ((rost.hasOwnProperty(from)) && (rost[from]).hasOwnProperty("name")) {
 
       var name = (rost[from]['pageAlias']) ? rost[from]['pageAlias'] : rost[from]["name"];
       if ($xml.attr('type') === 'unavailable') {
-        misc.supportStatus(name,'unavailable');
+        Self.misc.supportStatus(name,'unavailable');
       }
       else {
         var type = $xml.find('show').text();
         if (type.length == 0) { type = 'chat' };
-        misc.supportStatus(name,type);
+        Self.misc.supportStatus(name,type);
       }
     }
     return true;
@@ -315,12 +294,12 @@ window.events = {
   messaged: function(msgObj) {
     var from = msgObj["from"]
       try { 
-        var name = misc.supportName(from);
+        var name = Self.misc.supportName(from);
       } catch(e) {
         var name = from;
-        misc.log("DEBUG",name + " :error determining support name " + msgObj["body"]);
+        Self.misc.log("DEBUG",name + " :error determining support name " + msgObj["body"]);
       }
-    misc.log("DEBUG",name + " : " + msgObj["body"]);
+    Self.misc.log("DEBUG",name + " : " + msgObj["body"]);
     try {
       hooks["message"](name,msgObj["body"]);
     } catch (e) {;}
@@ -328,7 +307,7 @@ window.events = {
   },
 
   roster: function(data) {
-    misc.log("DEBUG",data);
+    Self.misc.log("DEBUG",data);
     var roster = {};
     $(data).find('item').each(function(){
       var $el = $(this);
@@ -341,34 +320,34 @@ window.events = {
       'subscription': $el.attr('subscription'),
       };     
     });
-    control.socket.roster = roster;
+    Self.control.socket.roster = roster;
 
   },
 
   connected: function() {
-    control.socket.addHandler(events._onMsg, null, 'message', null, null,  null);
-    control.socket.addHandler(events.presence,null,'presence',null, null, null);
-    control.socket.sendIQ($iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'}),function(data){
-      events.roster(data);
+    Self.control.socket.addHandler(Self.events._onMsg, null, 'message', null, null,  null);
+    Self.control.socket.addHandler(Self.events.presence,null,'presence',null, null, null);
+    Self.control.socket.sendIQ($iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'}),function(data){
+      Self.events.roster(data);
     });
 
-    control.socket.send($iq({type:'set',id:'enablecarbons'}).c('enable', {xmlns: 'urn:xmpp:carbons:2'}).tree());
-    control.socket.send($pres().tree());
+    Self.control.socket.send($iq({type:'set',id:'enablecarbons'}).c('enable', {xmlns: 'urn:xmpp:carbons:2'}).tree());
+    Self.control.socket.send($pres().tree());
 
   },
 
   registerSuccess: function(profile) {
-    misc.log("DEBUG","Registered as " + profile["username"]);
+    Self.misc.log("DEBUG","Registered as " + profile["username"]);
 
-    control.storeProfile(profile);
-    control.connect(profile,this.stropheStatus);
+    Self.control.storeProfile(profile);
+    Self.control.connect(profile,this.stropheStatus);
   }
 
 
 };
 
 
-window.hooks = { 
+Self.hooks = { 
   message: function(){},
   statusChange: function(){},
   connected: function(){},
@@ -376,13 +355,10 @@ window.hooks = {
   connecting: function(){}
 };
 
+Self.init = Self.control.init;
 
-//EXECUTE NOW....
 
-depsReady(function(){
-  events.load();
-});
-
-CWM_DEPEND();
+return Self;
 
 })(window.jQuery);
+
